@@ -1,18 +1,18 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Account;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.AccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/technological_appliances/")
 public class AccountController {
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
+
+    public AccountController(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     /* PRIVATE
     // Get All Accounts
@@ -27,7 +27,7 @@ public class AccountController {
     @PostMapping("/accounts")
     public Account createAccount(@RequestBody Account account) {
 
-        return (Account) accountRepository.save(account);
+        return accountRepository.save(account);
     }
 
     /* PRIVATE

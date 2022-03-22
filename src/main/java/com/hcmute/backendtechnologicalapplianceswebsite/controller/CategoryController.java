@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/technological_appliances/")
 public class CategoryController {
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+
+    public CategoryController(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     // Get All Categories
     @GetMapping("categories")
@@ -25,7 +28,7 @@ public class CategoryController {
     public Category createCategory(@RequestBody Category category) {
     //  Default value for categoryId
         category.setCategoryId(categoryRepository.generateCategoryId());
-        return (Category) categoryRepository.save(category);
+        return categoryRepository.save(category);
     }
 
     //    Get category by id
@@ -39,8 +42,8 @@ public class CategoryController {
 
     //    Update category
     @PutMapping("/categories/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable String id, @RequestBody Category category) throws Throwable {
-        Category _category = (Category) categoryRepository.findByCategoryId(id);
+    public ResponseEntity<Category> updateCategory(@PathVariable String id, @RequestBody Category category) {
+        Category _category = categoryRepository.findByCategoryId(id);
         if (_category == null)
             throw new ResourceNotFoundException("Category not found with id: " + id);
         _category.setName(category.getName());
@@ -50,8 +53,8 @@ public class CategoryController {
 
     //    Delete category
     @DeleteMapping("/categories/{id}")
-    public ResponseEntity<Category> deleteCategory(@PathVariable String id) throws Throwable {
-        Category category = (Category) categoryRepository.findByCategoryId(id);
+    public ResponseEntity<Category> deleteCategory(@PathVariable String id) {
+        Category category = categoryRepository.findByCategoryId(id);
         if (category == null)
             throw new ResourceNotFoundException("Category not found with id: " + id);
         categoryRepository.delete(category);

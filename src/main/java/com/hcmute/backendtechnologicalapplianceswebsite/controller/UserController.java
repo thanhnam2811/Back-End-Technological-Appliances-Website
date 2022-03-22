@@ -3,7 +3,6 @@ package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/technological_appliances/")
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     // Get All Users
     @GetMapping("users")
@@ -23,7 +25,7 @@ public class UserController {
     //    Create user
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
-        return (User) userRepository.save(user);
+        return userRepository.save(user);
     }
 
     //    Get user by username
@@ -37,8 +39,8 @@ public class UserController {
 
     //    Update user
     @PutMapping("/users/{username}")
-    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user) throws Throwable {
-        User _user = (User) userRepository.findByUsername(username);
+    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user) {
+        User _user = userRepository.findByUsername(username);
         if (_user == null)
             throw new ResourceNotFoundException("User not found with username: " + username);
         _user.setName(user.getName());
@@ -53,8 +55,8 @@ public class UserController {
 
     //    Delete user
     @DeleteMapping("/users/{username}")
-    public ResponseEntity<User> deleteUser(@PathVariable String username) throws Throwable {
-        User user = (User) userRepository.findByUsername(username);
+    public ResponseEntity<User> deleteUser(@PathVariable String username) {
+        User user = userRepository.findByUsername(username);
         if (user == null)
             throw new ResourceNotFoundException("User not found with username: " + username);
         userRepository.delete(user);
