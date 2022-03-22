@@ -1,7 +1,9 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Account;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.AccountRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -9,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/technological_appliances/")
 public class AccountController {
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
-    public AccountController(AccountRepository accountRepository) {
+    public AccountController(AccountRepository accountRepository, UserRepository userRepository) {
         this.accountRepository = accountRepository;
+        this.userRepository = userRepository;
     }
 
     /* PRIVATE
@@ -26,8 +30,12 @@ public class AccountController {
     //    NOTE: Còn lỗi!!!
     @PostMapping("/accounts")
     public Account createAccount(@RequestBody Account account) {
-
-        return accountRepository.save(account);
+        User user = userRepository.findByUsername(account.getUsername());
+        account.setUser(user);
+        accountRepository.save(account);
+        user.setAccount(account);
+        userRepository.save(user);
+        return account;
     }
 
     /* PRIVATE

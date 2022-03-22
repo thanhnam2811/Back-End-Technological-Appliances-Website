@@ -1,10 +1,11 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "CartDetails")
-public class CartDetail {
+public class CartDetail implements Serializable {
     @EmbeddedId
     private CartDetailId id;
 

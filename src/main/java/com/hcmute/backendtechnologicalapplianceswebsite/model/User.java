@@ -3,13 +3,14 @@ package com.hcmute.backendtechnologicalapplianceswebsite.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Users")
-public class User {
+public class User implements Serializable {
     @Id
     @Column(name = "Username", nullable = false, length = 40)
     private String username;
@@ -44,7 +45,7 @@ public class User {
     private Set<CartDetail> cartDetails = new LinkedHashSet<>();
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     private Account account;
 
     @JsonIgnore

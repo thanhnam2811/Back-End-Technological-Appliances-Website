@@ -4,11 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
 @Table(name = "Coupons")
-public class Coupon {
+public class Coupon implements Serializable {
     @Id
     @Column(name = "CouponId", nullable = false, length = 40)
     private String couponId;

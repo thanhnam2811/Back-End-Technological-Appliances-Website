@@ -1,11 +1,12 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
 @Table(name = "Reviews")
-public class Review {
+public class Review  implements Serializable {
     @Id
     @Column(name = "ReviewId", nullable = false, length = 20)
     private String reviewId;

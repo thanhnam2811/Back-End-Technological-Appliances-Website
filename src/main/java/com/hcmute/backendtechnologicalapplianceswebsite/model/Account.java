@@ -3,17 +3,17 @@ package com.hcmute.backendtechnologicalapplianceswebsite.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Account")
-public class Account {
+public class Account implements Serializable {
     @Id
     @Column(name = "Username", nullable = false, length = 40)
     private String username;
 
     @MapsId
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "Username", nullable = false)
     private User user;
 
