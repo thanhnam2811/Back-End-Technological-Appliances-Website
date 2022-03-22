@@ -1,15 +1,17 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Categories")
-public class Category {
+public class Category implements Serializable {
+
     @Id
-    @Column(name = "CategoryId", nullable = false, length = 20)
+    @Column(name = "CategoryId", length = 20)
     private String categoryId;
 
     @Column(name = "Name", nullable = false, length = 100)

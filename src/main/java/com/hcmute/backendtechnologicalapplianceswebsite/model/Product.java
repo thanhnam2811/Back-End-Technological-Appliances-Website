@@ -2,6 +2,8 @@ package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Products")
@@ -67,6 +69,39 @@ public class Product {
 
     @Column(name = "Price", nullable = false)
     private Double price;
+
+    @OneToMany(mappedBy = "product")
+    private Set<Review> reviews = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    private Set<CartDetail> cartDetails = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    private Set<OrderDetail> orderDetails = new LinkedHashSet<>();
+
+    public Set<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(Set<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public Set<CartDetail> getCartDetails() {
+        return cartDetails;
+    }
+
+    public void setCartDetails(Set<CartDetail> cartDetails) {
+        this.cartDetails = cartDetails;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public Double getPrice() {
         return price;

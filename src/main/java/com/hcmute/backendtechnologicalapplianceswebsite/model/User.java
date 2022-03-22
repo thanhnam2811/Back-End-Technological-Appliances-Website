@@ -1,10 +1,11 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.sql.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Users")
@@ -23,7 +24,7 @@ public class User {
     private String phoneNumber;
 
     @Column(name = "DateOfBirth")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column(name = "Address", nullable = false, length = 200)
     private String address;
@@ -33,6 +34,54 @@ public class User {
 
     @Column(name = "Role")
     private Integer role;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "username", fetch = FetchType.LAZY)
+    private Set<Review> reviews = new LinkedHashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<CartDetail> cartDetails = new LinkedHashSet<>();
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    private Account account;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "username", fetch = FetchType.LAZY)
+    private Set<Order> orders = new LinkedHashSet<>();
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Set<CartDetail> getCartDetails() {
+        return cartDetails;
+    }
+
+    public void setCartDetails(Set<CartDetail> cartDetails) {
+        this.cartDetails = cartDetails;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public Integer getRole() {
         return role;
@@ -58,11 +107,11 @@ public class User {
         this.address = address;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -94,7 +143,7 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String id) {
+        this.username = id;
     }
 }

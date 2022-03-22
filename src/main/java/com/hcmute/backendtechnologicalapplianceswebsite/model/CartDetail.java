@@ -21,6 +21,19 @@ public class CartDetail {
     @Column(name = "Quantity", nullable = false)
     private Integer quantity;
 
+    @MapsId("username")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Username")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }

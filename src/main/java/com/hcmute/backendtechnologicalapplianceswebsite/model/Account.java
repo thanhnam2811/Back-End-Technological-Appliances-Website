@@ -1,5 +1,7 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,9 +12,10 @@ public class Account {
     private String username;
 
     @MapsId
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Username", nullable = false)
-    private User users;
+    private User user;
 
     @Column(name = "Password", nullable = false, length = 40)
     private String password;
@@ -25,12 +28,12 @@ public class Account {
         this.password = password;
     }
 
-    public User getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(User users) {
-        this.users = users;
+    public void setUser(User users) {
+        this.user = users;
     }
 
     public String getUsername() {

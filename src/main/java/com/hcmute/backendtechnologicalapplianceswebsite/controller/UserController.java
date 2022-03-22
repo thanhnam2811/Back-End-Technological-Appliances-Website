@@ -37,7 +37,7 @@ public class UserController {
 
     //    Update user
     @PutMapping("/users/{username}")
-    public ResponseEntity<User> updateuser(@PathVariable String username, @RequestBody User user) throws Throwable {
+    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user) throws Throwable {
         User _user = (User) userRepository.findByUsername(username);
         if (_user == null)
             throw new ResourceNotFoundException("User not found with username: " + username);
@@ -53,7 +53,7 @@ public class UserController {
 
     //    Delete user
     @DeleteMapping("/users/{username}")
-    public ResponseEntity<User> deleteuser(@PathVariable String username) throws Throwable {
+    public ResponseEntity<User> deleteUser(@PathVariable String username) throws Throwable {
         User user = (User) userRepository.findByUsername(username);
         if (user == null)
             throw new ResourceNotFoundException("User not found with username: " + username);
