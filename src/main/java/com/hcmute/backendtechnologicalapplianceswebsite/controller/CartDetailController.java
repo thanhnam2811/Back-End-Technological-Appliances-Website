@@ -12,10 +12,10 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/technological_appliances/")
-public class CartController {
+public class CartDetailController {
     private final CartDetailRepository cartDetailRepository;
 
-    public CartController(CartDetailRepository cartDetailRepository) {
+    public CartDetailController(CartDetailRepository cartDetailRepository) {
         this.cartDetailRepository = cartDetailRepository;
     }
 
