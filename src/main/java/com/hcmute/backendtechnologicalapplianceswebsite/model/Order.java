@@ -1,19 +1,18 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.Instant;
 
 @Entity
 @Table(name = "Orders")
-public class Order implements Serializable {
+public class Order {
     @Id
     @Column(name = "OrderId", nullable = false, length = 20)
     private String orderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Username")
-    private User username;
+    private User user;
 
     @Column(name = "Name", nullable = false, length = 100)
     private String name;
@@ -21,8 +20,8 @@ public class Order implements Serializable {
     @Column(name = "Address", nullable = false, length = 200)
     private String address;
 
-    @Column(name = "PhoneNumer", nullable = false, length = 20)
-    private String phoneNumer;
+    @Column(name = "PhoneNumber", nullable = false, length = 20)
+    private String phoneNumber;
 
     @Column(name = "PurchaseDate")
     private Instant purchaseDate;
@@ -30,7 +29,7 @@ public class Order implements Serializable {
     @Column(name = "TotalPrices")
     private Double totalPrices;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "DeliveryId")
     private Delivery delivery;
 
@@ -91,12 +90,12 @@ public class Order implements Serializable {
         this.purchaseDate = purchaseDate;
     }
 
-    public String getPhoneNumer() {
-        return phoneNumer;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhoneNumer(String phoneNumer) {
-        this.phoneNumer = phoneNumer;
+    public void setPhoneNumber(String phoneNumer) {
+        this.phoneNumber = phoneNumer;
     }
 
     public String getAddress() {
@@ -115,12 +114,12 @@ public class Order implements Serializable {
         this.name = name;
     }
 
-    public User getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(User username) {
-        this.username = username;
+    public void setUser(User username) {
+        this.user = username;
     }
 
     public String getOrderId() {

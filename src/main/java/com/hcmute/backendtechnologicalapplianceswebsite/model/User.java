@@ -49,7 +49,7 @@ public class User implements Serializable {
     private Account account;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "username", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Order> orders = new LinkedHashSet<>();
 
     public Set<Order> getOrders() {
