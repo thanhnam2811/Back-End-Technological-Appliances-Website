@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ClientWebTechAppliances {
+public class ServerWebTechAppliances {
 
     public static void main(String[] args) {
-        SpringApplication.run(ClientWebTechAppliances.class, args);
+        SpringApplication.run(ServerWebTechAppliances.class, args);
     }
 
 }

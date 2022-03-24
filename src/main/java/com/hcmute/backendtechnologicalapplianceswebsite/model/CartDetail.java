@@ -12,7 +12,7 @@ public class CartDetail implements Serializable {
     @MapsId("username")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Username", nullable = false)
-    private User username;
+    private User user;
 
     @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -21,19 +21,6 @@ public class CartDetail implements Serializable {
 
     @Column(name = "Quantity", nullable = false)
     private Integer quantity;
-
-    @MapsId("username")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Username")
-    private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public Integer getQuantity() {
         return quantity;
@@ -51,12 +38,12 @@ public class CartDetail implements Serializable {
         this.product = product;
     }
 
-    public User getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(User username) {
-        this.username = username;
+    public void setUser(User username) {
+        this.user = username;
     }
 
     public CartDetailId getId() {

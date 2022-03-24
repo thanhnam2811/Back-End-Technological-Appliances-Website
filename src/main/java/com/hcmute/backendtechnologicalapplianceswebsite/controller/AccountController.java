@@ -20,7 +20,7 @@ public class AccountController {
 
     /* PRIVATE
     // Get All Accounts
-    @GetMapping("accounts")
+    @GetMapping("/accounts")
     public Iterable<Account> getAllAccounts() {
         return accountRepository.findAll();
     }

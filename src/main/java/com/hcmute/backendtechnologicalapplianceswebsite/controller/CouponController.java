@@ -18,7 +18,7 @@ public class CouponController {
         this.couponRepository = couponRepository;
     }
 
-    @GetMapping("coupons")
+    @GetMapping("/coupons")
     public Iterable<Coupon> getAllCoupons() {
         return couponRepository.findAll();
     }

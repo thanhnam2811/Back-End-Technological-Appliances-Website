@@ -18,7 +18,7 @@ public class ReviewController {
     }
 
     // Get All Reviews
-    @GetMapping("reviews")
+    @GetMapping("/reviews")
     public Iterable<Review> getAllReviews() {
         return reviewRepository.findAll();
     }

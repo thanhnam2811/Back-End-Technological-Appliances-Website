@@ -5,16 +5,26 @@ import org.hibernate.Hibernate;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class OrderDetailId implements Serializable {
+    @Serial
     private static final long serialVersionUID = -1500414871394842915L;
     @Column(name = "OrderId", nullable = false, length = 20)
     private String orderId;
     @Column(name = "ProductId", nullable = false, length = 20)
     private String productId;
+
+    public OrderDetailId() {
+    }
+
+    public OrderDetailId(String orderId, String productId) {
+        this.orderId = orderId;
+        this.productId = productId;
+    }
 
     public String getProductId() {
         return productId;

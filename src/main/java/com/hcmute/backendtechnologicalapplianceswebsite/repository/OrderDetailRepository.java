@@ -5,8 +5,8 @@ import com.hcmute.backendtechnologicalapplianceswebsite.model.OrderDetail;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.OrderDetailId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetailId> {
-    OrderDetail findByOrderId(String id);
+import java.util.List;
 
-    OrderDetail findByOrderAndProductId(String orderid, String productid);
+public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetailId> {
+    List<OrderDetail> findAllById_OrderId(String orderId);
 }

@@ -17,7 +17,7 @@ public class BrandController {
     }
 
     // Get All Brands
-    @GetMapping("brands")
+    @GetMapping("/brands")
     public Iterable<Brand> getAllBrands() {
         return brandRepository.findAll();
     }

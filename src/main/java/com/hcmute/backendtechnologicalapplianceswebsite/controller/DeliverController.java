@@ -18,7 +18,7 @@ public class DeliverController {
         this.deliveryRepository = deliveryRepository;
     }
     // Get All Categories
-    @GetMapping("deliveries")
+    @GetMapping("/deliveries")
     public Iterable<Delivery> getAllDeliveries() {
         return deliveryRepository.findAll();
     }

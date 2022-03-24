@@ -4,8 +4,8 @@ import com.hcmute.backendtechnologicalapplianceswebsite.model.CartDetail;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.CartDetailId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CartDetailRepository extends JpaRepository<CartDetail, CartDetailId> {
-    CartDetail findByUsername(String id);
+import java.util.List;
 
-    CartDetail findByUsernameAndProductId(String username,String productid);
+public interface CartDetailRepository extends JpaRepository<CartDetail, CartDetailId> {
+    List<CartDetail> findAllById_Username(String username);
 }

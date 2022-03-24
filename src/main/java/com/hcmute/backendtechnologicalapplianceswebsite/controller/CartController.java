@@ -2,66 +2,63 @@ package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.CartDetail;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.OrderDetail;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.CartDetailId;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.CartDetailRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/technological_appliances/")
 public class CartController {
-    private final CartDetailRepository cartRepository;
+    private final CartDetailRepository cartDetailRepository;
 
-    public CartController(CartDetailRepository cartRepository) {
-        this.cartRepository = cartRepository;
+    public CartController(CartDetailRepository cartDetailRepository) {
+        this.cartDetailRepository = cartDetailRepository;
     }
 
 
-    @GetMapping("cartdetails")
-    public ResponseEntity<CartDetail> getAllCoupons(@PathVariable String id)
-    {
-        CartDetail orderDetail=cartRepository.findByUsername(id);
-        if (orderDetail == null)
-            throw new ResourceNotFoundException("Username not found with id: " + id);
-        return ResponseEntity.ok(orderDetail);
+    @GetMapping("/cart-details/{username}")
+    public ResponseEntity<List<CartDetail>> getCartDetails(@PathVariable String username) {
+        List<CartDetail> cartDetails = cartDetailRepository.findAllById_Username(username);
+        return ResponseEntity.ok(cartDetails);
     }
 
-    @PostMapping("/cartdetails")
-    public CartDetail createOrderDetail(@RequestBody CartDetail cartDetail) {
-        return cartRepository.save(cartDetail);
+    @PostMapping("/cart-details")
+    public CartDetail createCartDetail(@RequestBody CartDetail cartDetail) {
+        return cartDetailRepository.save(cartDetail);
     }
 
-    @GetMapping("/cartdetails/{username}/{productid}")
-    public ResponseEntity<CartDetail> getOrderById(@PathVariable String username,String productid) {
-        CartDetail cartdetail = cartRepository.findByUsernameAndProductId(username,productid);
-        if (cartdetail == null)
-            throw new ResourceNotFoundException("Cart not found with username: " + username +"productid"+productid);
-        return ResponseEntity.ok(cartdetail);
+    @GetMapping("/cart-details/{username}/{productId}")
+    public ResponseEntity<CartDetail> getCartDetail(@PathVariable String username, @PathVariable String productId) {
+        CartDetailId cartDetailId = new CartDetailId(username, productId);
+        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartDetailId));
+        return ResponseEntity.ok(cartDetail);
     }
 
     //    Update brand
-    @PutMapping("/orders/{username}/{productid}")
-    public ResponseEntity<CartDetail> updateOrder(@PathVariable String username,@PathVariable String productid, @RequestBody CartDetail order) {
-        CartDetail _cart = cartRepository.findByUsernameAndProductId(username,productid);
-        if (_cart == null)
-            throw new ResourceNotFoundException("Cart not found with username: " + username +"productid"+productid);
+    @PutMapping("/carts/{username}/{productId}")
+    public ResponseEntity<CartDetail> updateCartDetail(@PathVariable String username, @PathVariable String productId, @RequestBody CartDetail cart) {
+        CartDetailId cartDetailId = new CartDetailId(username, productId);
+        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartDetailId));
 
-        _cart.setId(order.getId());
-        _cart.setQuantity(order.getQuantity());
-
-        cartRepository.save(_cart);
-        return ResponseEntity.ok(_cart);
+        cartDetail.setQuantity(cart.getQuantity());
+        cartDetailRepository.save(cartDetail);
+        return ResponseEntity.ok(cartDetail);
     }
 
 
-    @DeleteMapping("/orders/{username}/{productid}")
-    public ResponseEntity<CartDetail> deleteCoupon(@PathVariable String username,@PathVariable String productid) {
-        CartDetail order = cartRepository.findByUsernameAndProductId(username,productid);
-        if (order == null)
-            throw new ResourceNotFoundException("Cart not found with username: " + username +"productid"+productid);
-        cartRepository.delete(order);
-        return ResponseEntity.ok(order);
+    @DeleteMapping("/carts/{username}/{productId}")
+    public ResponseEntity<CartDetail> deleteCartDetail(@PathVariable String username, @PathVariable String productId) {
+        CartDetailId cartDetailId = new CartDetailId(username, productId);
+        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartDetailId));
+        cartDetailRepository.delete(cartDetail);
+        return ResponseEntity.ok(cartDetail);
     }
 
 

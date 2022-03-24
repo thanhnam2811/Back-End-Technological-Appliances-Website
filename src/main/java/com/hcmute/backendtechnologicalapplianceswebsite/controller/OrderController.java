@@ -1,7 +1,6 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.Coupon;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Order;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.OrderRepository;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +17,13 @@ public class OrderController {
     }
 
 
-    @GetMapping("orders")
+    @GetMapping("/orders")
     public Iterable<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
     @PostMapping("/orders")
     public Order createOrder(@RequestBody Order order) {
-
         order.setOrderId(orderRepository.generateOrderId());
         return orderRepository.save(order);
     }
@@ -51,8 +49,8 @@ public class OrderController {
         _order.setDelivery(order.getDelivery());
         _order.setDiscountPrice(order.getDiscountPrice());
         _order.setPurchaseDate(order.getPurchaseDate());
-        _order.setPhoneNumer(order.getPhoneNumer());
-        _order.setUsername(order.getUsername());
+        _order.setPhoneNumber(order.getPhoneNumber());
+        _order.setUser(order.getUser());
         _order.setStatus(order.getStatus());
         _order.setTotalPrices(order.getTotalPrices());
 

@@ -5,16 +5,27 @@ import org.hibernate.Hibernate;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class CartDetailId implements Serializable {
+    @Serial
     private static final long serialVersionUID = -4155608218831706701L;
     @Column(name = "Username", nullable = false, length = 40)
     private String username;
     @Column(name = "ProductId", nullable = false, length = 20)
     private String productId;
+
+    public CartDetailId() {
+
+    }
+
+    public CartDetailId(String username, String productId) {
+        this.username = username;
+        this.productId = productId;
+    }
 
     public String getProductId() {
         return productId;
