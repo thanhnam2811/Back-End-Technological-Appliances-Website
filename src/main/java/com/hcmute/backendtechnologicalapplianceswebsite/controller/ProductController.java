@@ -1,7 +1,11 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.BrandRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.CategoryRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/technological_appliances/")
 public class ProductController {
     private final ProductRepository productRepository;
+    private final BrandRepository brandRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, BrandRepository brandRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.brandRepository = brandRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     // Get All Products
@@ -27,8 +35,18 @@ public class ProductController {
     public Product createProduct(@RequestBody Product product) {
         //  Default value for productId
         product.setProductId(productRepository.generateProductId());
+
+        Brand brand = brandRepository.findByBrandId(product.getBrand().getBrandId());
+        if (brand == null)
+            throw new ResourceNotFoundException("Brand not found with id: " + product.getBrand().getBrandId());
+        product.setBrand(brand);
+
+        Category category = categoryRepository.findByCategoryId(product.getCategory().getCategoryId());
+        if (category == null)
+            throw new ResourceNotFoundException("Category not found with id: " + product.getCategory().getCategoryId());
+        product.setCategory(category);
         return productRepository.save(product);
-    }
+}
 
     //    Get product by id
     @GetMapping("/products/{id}")

@@ -1,6 +1,7 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -73,12 +74,15 @@ public class Product implements Serializable {
     @Column(name = "Price", nullable = false)
     private Double price;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private Set<Review> reviews = new LinkedHashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private Set<CartDetail> cartDetails = new LinkedHashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private Set<OrderDetail> orderDetails = new LinkedHashSet<>();
 

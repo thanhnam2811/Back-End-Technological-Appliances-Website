@@ -27,7 +27,6 @@ public class AccountController {
     */
 
     //    Create account
-    //    NOTE: Còn lỗi!!!
     @PostMapping("/accounts")
     public Account createAccount(@RequestBody Account account) {
         User user = userRepository.findByUsername(account.getUsername());
