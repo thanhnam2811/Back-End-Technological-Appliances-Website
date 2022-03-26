@@ -1,5 +1,7 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -11,10 +13,12 @@ public class Review  implements Serializable {
     @Column(name = "ReviewId", nullable = false, length = 20)
     private String reviewId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Username")
-    private User username;
+    private User user;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ProductId")
     private Product product;
@@ -61,12 +65,12 @@ public class Review  implements Serializable {
         this.product = product;
     }
 
-    public User getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(User username) {
-        this.username = username;
+    public void setUser(User username) {
+        this.user = username;
     }
 
     public String getReviewId() {

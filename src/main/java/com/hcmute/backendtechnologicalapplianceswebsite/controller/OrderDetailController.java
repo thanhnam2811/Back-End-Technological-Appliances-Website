@@ -1,9 +1,13 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Order;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.OrderDetail;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.OrderDetailId;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.OrderDetailRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.OrderRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +18,13 @@ import java.util.List;
 @RequestMapping("/api/technological_appliances/")
 public class OrderDetailController {
     private final OrderDetailRepository orderDetailRepository;
+    private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
 
-    public OrderDetailController(OrderDetailRepository orderDetailRepository) {
+    public OrderDetailController(OrderDetailRepository orderDetailRepository, OrderRepository orderRepository, ProductRepository productRepository) {
         this.orderDetailRepository = orderDetailRepository;
+        this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
     }
 
 
@@ -28,6 +36,13 @@ public class OrderDetailController {
 
     @PostMapping("/order-details")
     public OrderDetail createOrderDetail(@RequestBody OrderDetail orderDetail) {
+        Order order = orderRepository.findById(orderDetail.getId().getOrderId())
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderDetail.getId().getOrderId()));
+        Product product = productRepository.findById(orderDetail.getId().getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + orderDetail.getId().getProductId()));
+        orderDetail.setOrder(order);
+        orderDetail.setProduct(product);
+
         return orderDetailRepository.save(orderDetail);
     }
 

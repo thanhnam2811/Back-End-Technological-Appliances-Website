@@ -50,7 +50,7 @@ public class ReviewController {
         _review.setRate(review.getRate());
         _review.setTime(review.getTime());
         _review.setProduct(review.getProduct());
-        _review.setUsername(review.getUsername());
+        _review.setUser(review.getUser());
         reviewRepository.save(_review);
         return ResponseEntity.ok(_review);
     }

@@ -135,8 +135,8 @@ CREATE TABLE OrderDetails
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     Quantity   INTEGER NOT NULL,
-    Price      FLOAT   NOT NULL,
-    TotalPrice FLOAT   NOT NULL,
+    Price      FLOAT,
+    TotalPrice FLOAT,
     PRIMARY KEY (OrderId, ProductId)
 )
 GO
@@ -918,36 +918,33 @@ end
 go
 
 -- SAMPLE DATAS --
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender], [Role])
-VALUES (N'nam', N'Thành Nam', N'thanhnam.thai01@gmail.com', N'0981771024', CAST(N'2001-11-28' AS Date), N'Bến Tre', 1,
-        0)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender], [Role]) VALUES (N'nam', N'Thành Nam', N'thanhnam.thai01@gmail.com', N'0981771024', CAST(N'2001-11-28' AS Date), N'Bến Tre', 1, 0)
 GO
-INSERT [dbo].[Account] ([Username], [Password])
-VALUES (N'nam', N'nam')
+INSERT [dbo].[Account] ([Username], [Password]) VALUES (N'nam', N'nam')
 GO
-INSERT [dbo].[Categories] ([CategoryId], [Name])
-VALUES (N'C01', N'Laptop')
+INSERT [dbo].[Categories] ([CategoryId], [Name]) VALUES (N'C01', N'Laptop')
 GO
-INSERT [dbo].[Categories] ([CategoryId], [Name])
-VALUES (N'C02', N'Smart Phone')
+INSERT [dbo].[Categories] ([CategoryId], [Name]) VALUES (N'C02', N'Smart Phone')
 GO
-INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
-VALUES (N'B01', N'Samsung', N'samsung@email.com', N'link', N'Korea')
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location]) VALUES (N'B01', N'Samsung', N'samsung@email.com', N'link', N'Korea')
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
-                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
-                         [Price])
-VALUES (N'P00001', N'Galaxy S21', N'C02', N'B01', N'link', 3, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
-        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00001', N'Galaxy S21', N'C02', N'B01', N'link', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[Deliveries] ([DeliveryId], [Name], [Email], [PhoneNumber], [Location])
-VALUES (N'D01', N'GiaoHanhNhanh', N'GHN@emai.com', N'0998877666', N'TP.HCM')
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00002', N'Galaxy S21', NULL, NULL, N'link', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[Orders] ([OrderId], [Username], [Name], [Address], [PhoneNumber], [PurchaseDate], [TotalPrices],
-                       [DeliveryId], [Status], [CouponId], [DiscountPrice])
-VALUES (N'O00001', N'nam', N'Nam', N'Bến Tre', N'0981771024', CAST(N'2022-03-24T00:00:00.000' AS DateTime), 50000000,
-        N'D01', N'waiting', NULL, NULL)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00003', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[OrderDetails] ([OrderId], [ProductId], [Quantity], [Price], [TotalPrice])
-VALUES (N'O00001', N'P00001', 2, 25000000, 50000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00004', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
+GO
+INSERT [dbo].[Reviews] ([ReviewId], [Username], [ProductId], [Content], [Rate], [Time]) VALUES (N'R00001', N'nam', N'P00001', N'Sản phẩm tẹt zời', 5, CAST(N'2022-03-26T07:28:32.000' AS DateTime))
+GO
+INSERT [dbo].[Deliveries] ([DeliveryId], [Name], [Email], [PhoneNumber], [Location]) VALUES (N'D01', N'GiaoHanhNhanh', N'GHN@emai.com', N'0998877666', N'TP.HCM')
+GO
+INSERT [dbo].[Orders] ([OrderId], [Username], [Name], [Address], [PhoneNumber], [PurchaseDate], [TotalPrices], [DeliveryId], [Status], [CouponId], [DiscountPrice]) VALUES (N'O00001', N'nam', N'Nam', N'Bến Tre', N'0981771024', CAST(N'2022-03-24T00:00:00.000' AS DateTime), 50000000, N'D01', N'waiting', NULL, NULL)
+GO
+INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity]) VALUES (N'nam', N'P00001', 2)
+GO
+INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity]) VALUES (N'nam', N'P00002', 5)
+GO
+INSERT [dbo].[OrderDetails] ([OrderId], [ProductId], [Quantity], [Price], [TotalPrice]) VALUES (N'O00001', N'P00001', 2, 25000000, 50000000)
 GO

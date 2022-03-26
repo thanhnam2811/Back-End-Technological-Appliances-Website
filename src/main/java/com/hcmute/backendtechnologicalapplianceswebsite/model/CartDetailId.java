@@ -56,4 +56,12 @@ public class CartDetailId implements Serializable {
         return Objects.equals(this.productId, entity.productId) &&
                 Objects.equals(this.username, entity.username);
     }
+
+    @Override
+    public String toString() {
+        return "CartDetailId{" +
+                "productId='" + productId + '\'' +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

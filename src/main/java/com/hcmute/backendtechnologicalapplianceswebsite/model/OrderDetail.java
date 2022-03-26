@@ -1,5 +1,7 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -9,11 +11,13 @@ public class OrderDetail implements Serializable {
     @EmbeddedId
     private OrderDetailId id;
 
+    @JsonIgnore
     @MapsId("orderId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "OrderId", nullable = false)
     private Order order;
 
+    @JsonIgnore
     @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ProductId", nullable = false)
@@ -22,10 +26,10 @@ public class OrderDetail implements Serializable {
     @Column(name = "Quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "Price", nullable = false)
+    @Column(name = "Price")
     private Double price;
 
-    @Column(name = "TotalPrice", nullable = false)
+    @Column(name = "TotalPrice")
     private Double totalPrice;
 
     public Double getTotalPrice() {
@@ -74,5 +78,18 @@ public class OrderDetail implements Serializable {
 
     public void setId(OrderDetailId id) {
         this.id = id;
+    }
+
+    // To string
+    @Override
+    public String toString() {
+        return "OrderDetail{" +
+                "id=" + id +
+                ", order=" + order +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", totalPrice=" + totalPrice +
+                '}';
     }
 }

@@ -37,7 +37,7 @@ public class User implements Serializable {
     private Integer role;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "username", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Review> reviews = new LinkedHashSet<>();
 
     @JsonIgnore

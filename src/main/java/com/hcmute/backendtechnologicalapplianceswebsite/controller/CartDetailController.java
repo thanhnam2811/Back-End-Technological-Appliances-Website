@@ -3,7 +3,11 @@ package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.CartDetail;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.CartDetailId;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.CartDetailRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +18,13 @@ import java.util.List;
 @RequestMapping("/api/technological_appliances/")
 public class CartDetailController {
     private final CartDetailRepository cartDetailRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
-    public CartDetailController(CartDetailRepository cartDetailRepository) {
+    public CartDetailController(CartDetailRepository cartDetailRepository, UserRepository userRepository, ProductRepository productRepository) {
         this.cartDetailRepository = cartDetailRepository;
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
     }
 
 
@@ -28,6 +36,13 @@ public class CartDetailController {
 
     @PostMapping("/cart-details")
     public CartDetail createCartDetail(@RequestBody CartDetail cartDetail) {
+        User user = userRepository.findById(cartDetail.getId().getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + cartDetail.getId().getUsername()));
+        Product product = productRepository.findById(cartDetail.getId().getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + cartDetail.getId().getProductId()));
+        cartDetail.setUser(user);
+        cartDetail.setProduct(product);
+
         return cartDetailRepository.save(cartDetail);
     }
 

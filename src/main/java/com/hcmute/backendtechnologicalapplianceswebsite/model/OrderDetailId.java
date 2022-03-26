@@ -55,4 +55,12 @@ public class OrderDetailId implements Serializable {
         return Objects.equals(this.productId, entity.productId) &&
                 Objects.equals(this.orderId, entity.orderId);
     }
+
+    @Override
+    public String toString() {
+        return "OrderDetailId{" +
+                "orderId='" + orderId + '\'' +
+                ", productId='" + productId + '\'' +
+                '}';
+    }
 }

@@ -1,5 +1,7 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -9,11 +11,13 @@ public class CartDetail implements Serializable {
     @EmbeddedId
     private CartDetailId id;
 
+    @JsonIgnore
     @MapsId("username")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "Username", nullable = false)
     private User user;
 
+    @JsonIgnore
     @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ProductId", nullable = false)
@@ -52,5 +56,15 @@ public class CartDetail implements Serializable {
 
     public void setId(CartDetailId id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "CartDetail{" +
+                "id=" + id +
+                ", user=" + user +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                '}';
     }
 }
