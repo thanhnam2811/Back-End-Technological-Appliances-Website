@@ -14,14 +14,24 @@ import java.util.Objects;
 @RequestMapping("/api/technological_appliances/")
 public class FileUploadController {
     @PostMapping("/uploadFile")
-    public ResponseEntity<FileUploadResponse> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestParam("files") MultipartFile[] files) {
+
+        String ImgName = "";
+        for (var file : files) {
+            String tempName = "";
+            tempName = GetFileNameImg(file);
+            ImgName = ImgName + tempName + "//";
+        }
+        return ResponseEntity.ok().body(ImgName);
+    }
+
+    private String GetFileNameImg(MultipartFile file) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String fileDownloadUri = "http://localhost:8080/downloadFile/" + fileName;
         long size = file.getSize();
 
         FileUploadUtil.saveFile(fileName, file);
 
-        FileUploadResponse fileUploadResponse = new FileUploadResponse(fileName, fileDownloadUri, size);
-        return ResponseEntity.ok().body(fileUploadResponse);
+        return fileName;
     }
 }

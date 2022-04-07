@@ -1,6 +1,7 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
+import com.hcmute.backendtechnologicalapplianceswebsite.fileUtils.upload.FileUploadUtil;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
@@ -8,7 +9,11 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.BrandReposito
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.CategoryRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Objects;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -25,18 +30,36 @@ public class ProductController {
     }
 
     // Get All Products
-    @GetMapping("/products")
+    @GetMapping(value = "/products")
     public Iterable<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    private String GetFileNameImg(MultipartFile file){
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        String fileDownloadUri = "http://localhost:8080/downloadFile/" + fileName;
+        long size = file.getSize();
+
+        FileUploadUtil.saveFile(fileName, file);
+
+        return fileName;
+    }
+
     //    Create product
-    @PostMapping("/products")
-    public Product createProduct(@RequestBody Product product) {
+    @PostMapping(value = "/products", consumes = {"multipart/form-data"})
+    public Product createProduct( Product product,@RequestParam(value = "files", required = false)MultipartFile[] uploadedFiles) {
+        String ImgName="";
+        for (var file: uploadedFiles) {
+            String tempName="";
+            tempName=GetFileNameImg(file);
+            ImgName=ImgName+tempName+"//";
+        }
         //  Default value for productId
         product.setProductId(productRepository.generateProductId());
 
-        Brand brand = brandRepository.findByBrandId(product.getBrand().getBrandId());
+        product.setImage(ImgName);
+
+        Brand brand = brandRepository.findByBrandId("product.getBrand().getBrandId()");
         if (brand == null)
             throw new ResourceNotFoundException("Brand not found with id: " + product.getBrand().getBrandId());
         product.setBrand(brand);
@@ -59,14 +82,25 @@ public class ProductController {
 
     //    Update product
     @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(@PathVariable String id,  Product product,@RequestParam("files") MultipartFile[] files) {
         Product _product = productRepository.findByProductId(id);
         if (_product == null)
             throw new ResourceNotFoundException("Product not found with id: " + id);
+        if(files==null){
+            _product.setImage(product.getImage());
+        }
+        else{
+            String ImgName="";
+            for (var file: files) {
+                String tempName="";
+                tempName=GetFileNameImg(file);
+                ImgName=ImgName+tempName+"//";
+            }
+            _product.setImage(ImgName);
+        }
         _product.setName(product.getName());
         _product.setPrice(product.getPrice());
         _product.setDescription(product.getDescription());
-        _product.setImage(product.getImage());
         _product.setCategory(product.getCategory());
         _product.setQuantity(product.getQuantity());
         _product.setBackCam(product.getBackCam());
