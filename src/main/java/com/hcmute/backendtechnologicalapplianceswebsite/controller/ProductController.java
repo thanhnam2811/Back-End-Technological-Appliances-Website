@@ -98,8 +98,7 @@ public class ProductController {
         } else {
             StringBuilder ImgName = new StringBuilder();
             for (var file : files) {
-                String tempName;
-                tempName = GetFileNameImg(file);
+                String tempName = GetFileNameImg(file);
                 ImgName.append(tempName).append("//");
             }
             _product.setImage(ImgName.toString());
