@@ -35,7 +35,7 @@ public class ProductController {
         return productRepository.findAll();
     }
 
-    private String GetFileNameImg(MultipartFile file){
+    private String GetFileNameImg(MultipartFile file) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String fileDownloadUri = "http://localhost:8080/downloadFile/" + fileName;
         long size = file.getSize();
@@ -45,19 +45,26 @@ public class ProductController {
         return fileName;
     }
 
+    // Get all product by brand
+    @GetMapping(value = "/products/brand/{brandId}")
+    public Iterable<Product> getAllProductsByBrand(@PathVariable String brandId) {
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + brandId));
+        return productRepository.findAllByBrand(brand);
+    }
+
     //    Create product
     @PostMapping(value = "/products", consumes = {"multipart/form-data"})
-    public Product createProduct( Product product,@RequestParam(value = "files", required = false)MultipartFile[] uploadedFiles) {
-        String ImgName="";
-        for (var file: uploadedFiles) {
-            String tempName="";
-            tempName=GetFileNameImg(file);
-            ImgName=ImgName+tempName+"//";
+    public Product createProduct(Product product, @RequestParam(value = "files", required = false) MultipartFile[] uploadedFiles) {
+        StringBuilder ImgName = new StringBuilder();
+        for (var file : uploadedFiles) {
+            String tempName = GetFileNameImg(file);
+            ImgName.append(tempName).append("//");
         }
         //  Default value for productId
         product.setProductId(productRepository.generateProductId());
 
-        product.setImage(ImgName);
+        product.setImage(ImgName.toString());
 
         Brand brand = brandRepository.findByBrandId("product.getBrand().getBrandId()");
         if (brand == null)
@@ -69,7 +76,7 @@ public class ProductController {
             throw new ResourceNotFoundException("Category not found with id: " + product.getCategory().getCategoryId());
         product.setCategory(category);
         return productRepository.save(product);
-}
+    }
 
     //    Get product by id
     @GetMapping("/products/{id}")
@@ -82,21 +89,20 @@ public class ProductController {
 
     //    Update product
     @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id,  Product product,@RequestParam("files") MultipartFile[] files) {
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, Product product, @RequestParam("files") MultipartFile[] files) {
         Product _product = productRepository.findByProductId(id);
         if (_product == null)
             throw new ResourceNotFoundException("Product not found with id: " + id);
-        if(files==null){
+        if (files == null) {
             _product.setImage(product.getImage());
-        }
-        else{
-            String ImgName="";
-            for (var file: files) {
-                String tempName="";
-                tempName=GetFileNameImg(file);
-                ImgName=ImgName+tempName+"//";
+        } else {
+            StringBuilder ImgName = new StringBuilder();
+            for (var file : files) {
+                String tempName;
+                tempName = GetFileNameImg(file);
+                ImgName.append(tempName).append("//");
             }
-            _product.setImage(ImgName);
+            _product.setImage(ImgName.toString());
         }
         _product.setName(product.getName());
         _product.setPrice(product.getPrice());

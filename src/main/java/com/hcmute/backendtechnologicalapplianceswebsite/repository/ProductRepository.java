@@ -1,5 +1,6 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.repository;
 
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
         return "P" + String.format("%05d", Integer.parseInt(lastProductId.substring(1)) + 1);
     }
+
+    Iterable<Product> findAllByBrand(Brand brand);
 }
