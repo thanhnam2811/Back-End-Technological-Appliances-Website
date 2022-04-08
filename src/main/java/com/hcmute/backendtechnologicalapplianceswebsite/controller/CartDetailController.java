@@ -40,10 +40,16 @@ public class CartDetailController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + cartDetail.getId().getUsername()));
         Product product = productRepository.findById(cartDetail.getId().getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + cartDetail.getId().getProductId()));
-        cartDetail.setUser(user);
-        cartDetail.setProduct(product);
 
-        return cartDetailRepository.save(cartDetail);
+        if (cartDetailRepository.existsById(cartDetail.getId())) {
+            CartDetail newCartDetail = cartDetailRepository.findById(cartDetail.getId()).get();
+            newCartDetail.setQuantity(newCartDetail.getQuantity() + cartDetail.getQuantity());
+            return cartDetailRepository.save(newCartDetail);
+        } else {
+            cartDetail.setUser(user);
+            cartDetail.setProduct(product);
+            return cartDetailRepository.save(cartDetail);
+        }
     }
 
     @GetMapping("/cart-details/{username}/{productId}")

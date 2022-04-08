@@ -10,15 +10,15 @@ import java.nio.file.Paths;
 
 public class FileDowloadUtil {
     private Path foundFile;
+
     public Resource getFileAsResource(String fileCode) throws IOException {
-        Path uploadDirectory= Paths.get("src/main/resources/static/images");
-        Files.list(uploadDirectory).forEach(file->{
-            if(file.getFileName().toString().startsWith(fileCode)){
-                foundFile=file;
-                return;
+        Path uploadDirectory = Paths.get("src/main/resources/static/images");
+        Files.list(uploadDirectory).forEach(file -> {
+            if (file.getFileName().toString().startsWith(fileCode)) {
+                foundFile = file;
             }
         });
-        if(foundFile!=null){
+        if (foundFile != null) {
             return new UrlResource(foundFile.toUri());
         }
         return null;
