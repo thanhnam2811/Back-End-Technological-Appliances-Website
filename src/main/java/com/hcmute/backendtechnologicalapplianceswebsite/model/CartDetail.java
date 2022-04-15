@@ -17,7 +17,6 @@ public class CartDetail implements Serializable {
     @JoinColumn(name = "Username", nullable = false)
     private User user;
 
-    @JsonIgnore
     @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ProductId", nullable = false)

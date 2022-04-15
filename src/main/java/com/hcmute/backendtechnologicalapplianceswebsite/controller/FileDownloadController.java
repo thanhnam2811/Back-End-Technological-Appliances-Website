@@ -1,6 +1,6 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.fileUtils.dowload.FileDowloadUtil;
+import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.dowload.FileDowloadUtil;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class FileDownloadController {
     @GetMapping("downloadFile/{fileCode}")
     public ResponseEntity<?> dowloadFile(@PathVariable("fileCode") String fileCode) {
         FileDowloadUtil dowloadUtil = new FileDowloadUtil();
-        Resource resource = null;
+        Resource resource;
         try {
             resource = dowloadUtil.getFileAsResource(fileCode);
         } catch (IOException e) {

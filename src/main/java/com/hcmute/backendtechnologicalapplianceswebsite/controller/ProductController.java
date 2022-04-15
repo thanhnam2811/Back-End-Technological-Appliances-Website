@@ -1,7 +1,7 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
-import com.hcmute.backendtechnologicalapplianceswebsite.fileUtils.upload.FileUploadUtil;
+import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.upload.FileUploadUtil;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;

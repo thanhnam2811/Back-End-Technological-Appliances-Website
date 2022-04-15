@@ -1,7 +1,6 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.fileUtils.upload.FileUploadResponse;
-import com.hcmute.backendtechnologicalapplianceswebsite.fileUtils.upload.FileUploadUtil;
+import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.upload.FileUploadUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +15,12 @@ public class FileUploadController {
     @PostMapping("/uploadFile")
     public ResponseEntity<String> uploadFile(@RequestParam("files") MultipartFile[] files) {
 
-        String ImgName = "";
+        StringBuilder ImgName = new StringBuilder();
         for (var file : files) {
-            String tempName = "";
-            tempName = GetFileNameImg(file);
-            ImgName = ImgName + tempName + "//";
+            String tempName = GetFileNameImg(file);
+            ImgName.append(tempName).append("//");
         }
-        return ResponseEntity.ok().body(ImgName);
+        return ResponseEntity.ok().body(ImgName.toString());
     }
 
     private String GetFileNameImg(MultipartFile file) {
