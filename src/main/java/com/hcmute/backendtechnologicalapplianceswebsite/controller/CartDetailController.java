@@ -60,7 +60,6 @@ public class CartDetailController {
         return ResponseEntity.ok(cartDetail);
     }
 
-    //    Update brand
     @PutMapping("/cart-details/{username}/{productId}")
     public ResponseEntity<CartDetail> updateCartDetail(@PathVariable String username, @PathVariable String productId, @RequestBody CartDetail cart) {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
