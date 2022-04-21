@@ -61,7 +61,7 @@ public class CartDetailController {
     }
 
     //    Update brand
-    @PutMapping("/carts/{username}/{productId}")
+    @PutMapping("/cart-details/{username}/{productId}")
     public ResponseEntity<CartDetail> updateCartDetail(@PathVariable String username, @PathVariable String productId, @RequestBody CartDetail cart) {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
@@ -73,7 +73,7 @@ public class CartDetailController {
     }
 
 
-    @DeleteMapping("/carts/{username}/{productId}")
+    @DeleteMapping("/cart-details/{username}/{productId}")
     public ResponseEntity<CartDetail> deleteCartDetail(@PathVariable String username, @PathVariable String productId) {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
@@ -81,6 +81,5 @@ public class CartDetailController {
         cartDetailRepository.delete(cartDetail);
         return ResponseEntity.ok(cartDetail);
     }
-
 
 }
