@@ -1,7 +1,9 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Review;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ReviewRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +14,25 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
 
     private final ReviewRepository reviewRepository;
+    private final ProductRepository productRepository;
 
-    public ReviewController(ReviewRepository reviewRepository) {
+    public ReviewController(ReviewRepository reviewRepository, ProductRepository productRepository) {
         this.reviewRepository = reviewRepository;
+        this.productRepository = productRepository;
     }
 
     // Get All Reviews
     @GetMapping("/reviews")
     public Iterable<Review> getAllReviews() {
         return reviewRepository.findAll();
+    }
+
+    // Get all reviews by product id
+    @GetMapping("/reviews/product/{productId}")
+    public Iterable<Review> getAllReviewsByProductId(@PathVariable(value = "productId") String productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+        return reviewRepository.findAllByProduct(product);
     }
 
     //    Create review
