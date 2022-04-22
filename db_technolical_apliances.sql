@@ -841,7 +841,7 @@ create trigger after_insert_update_OrderDetails
 begin
     if (@Quantity > @QuantityInStock)
         begin
-            print ('Quantity not valid! ProductId: ' + @ProductID);
+            raiserror (N'Quantity not valid! ProductId: %s, Quantity: %d, QuantityInStock: %d', 16, 1, @ProductID, @Quantity, @QuantityInStock)
             rollback;
         end
     else
@@ -882,7 +882,7 @@ create trigger after_insert_update_CartDetails
     where new.ProductId = p.ProductId
     if (@Quantity > @QuantityInStock)
         begin
-            print ('Quantity not valid! ProductId: ' + @ProductID);
+            raiserror(N'Quantity not valid! ProductId: %s, Quantity: %d, QuantityInStock: %d', 16, 1, @ProductId, @Quantity, @QuantityInStock)
             rollback;
         end
 go
