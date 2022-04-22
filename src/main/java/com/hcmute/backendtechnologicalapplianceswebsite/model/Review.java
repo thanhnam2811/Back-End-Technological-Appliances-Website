@@ -33,6 +33,10 @@ public class Review  implements Serializable {
     @Column(name = "\"Time\"")
     private Instant time;
 
+    public Review() {
+
+    }
+
     public Instant getTime() {
         return time;
     }
@@ -67,6 +71,10 @@ public class Review  implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    public String getUsername() {
+        return user.getUsername();
     }
 
     public void setUser(User username) {
