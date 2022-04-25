@@ -2,7 +2,7 @@ package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.sql.Date;
 
 @Entity
 @Table(name = "Orders")
@@ -25,7 +25,7 @@ public class Order implements Serializable {
     private String phoneNumber;
 
     @Column(name = "PurchaseDate")
-    private Instant purchaseDate;
+    private Date purchaseDate;
 
     @Column(name = "TotalPrices")
     private Double totalPrices;
@@ -83,11 +83,11 @@ public class Order implements Serializable {
         this.totalPrices = totalPrices;
     }
 
-    public Instant getPurchaseDate() {
+    public Date getPurchaseDate() {
         return purchaseDate;
     }
 
-    public void setPurchaseDate(Instant purchaseDate) {
+    public void setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
 

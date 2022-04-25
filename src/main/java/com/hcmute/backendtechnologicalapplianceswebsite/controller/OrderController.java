@@ -1,8 +1,12 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Delivery;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Order;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.DeliveryRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.OrderRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/technological_appliances/")
 public class OrderController {
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final DeliveryRepository deliveryRepository;
 
-    public OrderController(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository, UserRepository userRepository, DeliveryRepository deliveryRepository) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+        this.deliveryRepository = deliveryRepository;
     }
 
 
@@ -24,6 +32,19 @@ public class OrderController {
 
     @PostMapping("/orders")
     public Order createOrder(@RequestBody Order order) {
+        // User
+        User user = userRepository.findByUsername(order.getUser().getUsername());
+        if (user == null)
+            throw new ResourceNotFoundException("User not found with username: " + order.getUser().getUsername());
+        order.setUser(user);
+
+        // Delivery
+        Delivery delivery = deliveryRepository.findByDeliveryId(order.getDelivery().getDeliveryId());
+        if (delivery == null)
+            throw new ResourceNotFoundException("Delivery not found with id: " + order.getDelivery().getDeliveryId());
+        order.setDelivery(delivery);
+
+        // Id
         order.setOrderId(orderRepository.generateOrderId());
         return orderRepository.save(order);
     }
@@ -34,6 +55,14 @@ public class OrderController {
         if (order == null)
             throw new ResourceNotFoundException("Order not found with id: " + id);
         return ResponseEntity.ok(order);
+    }
+
+    @GetMapping("/orders/username/{username}")
+    public Iterable<Order> getOrderByUsername(@PathVariable String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null)
+            throw new ResourceNotFoundException("User not found with username: " + username);
+        return orderRepository.findAllByUser(user);
     }
 
     //    Update brand
