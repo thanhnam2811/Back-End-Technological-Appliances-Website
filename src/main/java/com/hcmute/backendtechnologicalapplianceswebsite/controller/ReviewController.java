@@ -10,6 +10,8 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepositor
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/technological_appliances/")
@@ -55,6 +57,11 @@ public class ReviewController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
         review.setUser(user);
 
+        // Time
+        if (review.getTime() == null) {
+            review.setTime(new Date());
+        }
+
         return reviewRepository.save(review);
     }
 
@@ -73,7 +80,13 @@ public class ReviewController {
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
         _review.setContent(review.getContent());
         _review.setRate(review.getRate());
-        _review.setTime(review.getTime());
+
+        // Time
+        if (review.getTime() == null)
+            _review.setTime(new Date());
+        else
+            _review.setTime(review.getTime());
+
         reviewRepository.save(_review);
         return ResponseEntity.ok(_review);
     }
