@@ -61,9 +61,8 @@ public class ReviewController {
     //    Get review by id
     @GetMapping("/reviews/{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable String id) {
-        Review review = reviewRepository.findByReviewId(id);
-        if (review == null)
-            throw new ResourceNotFoundException("Review not found with id: " + id);
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
         return ResponseEntity.ok(review);
     }
 
@@ -82,9 +81,8 @@ public class ReviewController {
     //    Delete review
     @DeleteMapping("/reviews/{id}")
     public ResponseEntity<Review> deleteReview(@PathVariable String id) {
-        Review review = reviewRepository.findByReviewId(id);
-        if (review == null)
-            throw new ResourceNotFoundException("Review not found with id: " + id);
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
         reviewRepository.delete(review);
         return ResponseEntity.ok(review);
     }

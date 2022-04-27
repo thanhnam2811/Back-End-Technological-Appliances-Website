@@ -24,7 +24,5 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
         return "R" + String.format("%015d", Long.parseLong(lastReviewId.substring(1)) + 1);
     }
 
-    Review findByReviewId(String id);
-
     Iterable<Review> findAllByProduct(Product product);
 }
