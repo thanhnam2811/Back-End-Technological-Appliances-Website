@@ -31,18 +31,16 @@ public class UserController {
     //    Get user by username
     @GetMapping("/users/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-        User user =  userRepository.findByUsername(username);
-        if (user == null)
-            throw new ResourceNotFoundException("User not found with username: " + username);
+        User user =  userRepository.findById(username).
+                orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
         return ResponseEntity.ok(user);
     }
 
     //    Update user
     @PutMapping("/users/{username}")
     public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user) {
-        User _user = userRepository.findByUsername(username);
-        if (_user == null)
-            throw new ResourceNotFoundException("User not found with username: " + username);
+        User _user = userRepository.findById(username).
+                orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
         _user.setName(user.getName());
         _user.setEmail(user.getEmail());
         _user.setPhoneNumber(user.getPhoneNumber());
@@ -56,9 +54,8 @@ public class UserController {
     //    Delete user
     @DeleteMapping("/users/{username}")
     public ResponseEntity<User> deleteUser(@PathVariable String username) {
-        User user = userRepository.findByUsername(username);
-        if (user == null)
-            throw new ResourceNotFoundException("User not found with username: " + username);
+        User user = userRepository.findById(username).
+                orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
         userRepository.delete(user);
         return ResponseEntity.ok(user);
     }

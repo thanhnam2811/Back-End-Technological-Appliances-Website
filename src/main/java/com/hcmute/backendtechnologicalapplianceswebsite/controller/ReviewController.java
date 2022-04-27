@@ -3,8 +3,10 @@ package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Review;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ReviewRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +17,12 @@ public class ReviewController {
 
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    public ReviewController(ReviewRepository reviewRepository, ProductRepository productRepository) {
+    public ReviewController(ReviewRepository reviewRepository, ProductRepository productRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     // Get All Reviews
@@ -36,10 +40,21 @@ public class ReviewController {
     }
 
     //    Create review
-    @PostMapping("/reviews")
-    public Review createReview(@RequestBody Review review) {
+    @PostMapping("/reviews/product/{productId}/user/{username}")
+    public Review createReview(@RequestBody Review review, @PathVariable(value = "productId") String productId, @PathVariable(value = "username") String username) {
         //  Default value for reviewId
         review.setReviewId(reviewRepository.generateReviewId());
+
+        // Product
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+        review.setProduct(product);
+
+        // User
+        User user = userRepository.findById(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+        review.setUser(user);
+
         return reviewRepository.save(review);
     }
 

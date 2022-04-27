@@ -33,15 +33,13 @@ public class OrderController {
     @PostMapping("/orders")
     public Order createOrder(@RequestBody Order order) {
         // User
-        User user = userRepository.findByUsername(order.getUser().getUsername());
-        if (user == null)
-            throw new ResourceNotFoundException("User not found with username: " + order.getUser().getUsername());
+        User user = userRepository.findById(order.getUser().getUsername())
+                .orElseThrow((() -> new ResourceNotFoundException("User not found with username: " + order.getUser().getUsername())));
         order.setUser(user);
 
         // Delivery
-        Delivery delivery = deliveryRepository.findByDeliveryId(order.getDelivery().getDeliveryId());
-        if (delivery == null)
-            throw new ResourceNotFoundException("Delivery not found with id: " + order.getDelivery().getDeliveryId());
+        Delivery delivery = deliveryRepository.findById(order.getDelivery().getDeliveryId())
+                .orElseThrow((() -> new ResourceNotFoundException("Delivery not found with deliveryId: " + order.getDelivery().getDeliveryId())));
         order.setDelivery(delivery);
 
         // Id
@@ -59,18 +57,16 @@ public class OrderController {
 
     @GetMapping("/orders/username/{username}")
     public Iterable<Order> getOrderByUsername(@PathVariable String username) {
-        User user = userRepository.findByUsername(username);
-        if (user == null)
-            throw new ResourceNotFoundException("User not found with username: " + username);
+        User user = userRepository.findById(username)
+                .orElseThrow((() -> new ResourceNotFoundException("User not found with username: " + username)));
         return orderRepository.findAllByUser(user);
     }
 
     //    Update brand
     @PutMapping("/orders/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable String id, @RequestBody Order order) {
-        Order _order = orderRepository.findByOrderId(id);
-        if (_order == null)
-            throw new ResourceNotFoundException("Order not found with id: " + id);
+        Order _order = orderRepository.findById(id)
+                .orElseThrow((() -> new ResourceNotFoundException("Order not found with id: " + id)));
 
         _order.setName(order.getName());
         _order.setAddress(order.getAddress());

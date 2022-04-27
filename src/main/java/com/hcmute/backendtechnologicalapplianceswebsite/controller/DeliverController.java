@@ -25,9 +25,8 @@ public class DeliverController {
 
     @GetMapping("/deliveries/{id}")
     public ResponseEntity<Delivery> getProductById(@PathVariable String id) {
-        Delivery delivery = deliveryRepository.findByDeliveryId(id);
-        if (delivery == null)
-            throw new ResourceNotFoundException("Delivery not found with id: " + id);
+        Delivery delivery = deliveryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Delivery not found with id: " + id));
         return ResponseEntity.ok(delivery);
     }
     @PostMapping("/deliveries")
@@ -38,23 +37,21 @@ public class DeliverController {
     }
     @PutMapping("/deliveries/{id}")
     public ResponseEntity<Delivery> updateBrand(@PathVariable String id, @RequestBody Delivery delivery) {
-        Delivery _delevery = deliveryRepository.findByDeliveryId(id);
-        if (_delevery == null)
-            throw new ResourceNotFoundException("Delevery not found with id: " + id);
+        Delivery _delivery = deliveryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Delivery not found with id: " + id));
 
-        _delevery.setLocation(delivery.getLocation());
-        _delevery.setEmail(delivery.getEmail());
-        _delevery.setName(delivery.getName());
-        _delevery.setPhoneNumber(delivery.getPhoneNumber());
-        deliveryRepository.save(_delevery);
-        return ResponseEntity.ok(_delevery);
+        _delivery.setLocation(delivery.getLocation());
+        _delivery.setEmail(delivery.getEmail());
+        _delivery.setName(delivery.getName());
+        _delivery.setPhoneNumber(delivery.getPhoneNumber());
+        deliveryRepository.save(_delivery);
+        return ResponseEntity.ok(_delivery);
     }
 
     @DeleteMapping("/deliveries/{id}")
     public ResponseEntity<Delivery> deleteDelevery(@PathVariable String id) {
-        Delivery delivery = deliveryRepository.findByDeliveryId(id);
-        if (delivery == null)
-            throw new ResourceNotFoundException("Delivery not found with id: " + id);
+        Delivery delivery = deliveryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Delivery not found with id: " + id));
         deliveryRepository.delete(delivery);
         return ResponseEntity.ok(delivery);
     }

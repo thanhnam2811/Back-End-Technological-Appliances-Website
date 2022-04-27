@@ -1,10 +1,12 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "Reviews")
@@ -30,18 +32,22 @@ public class Review  implements Serializable {
     @Column(name = "Rate")
     private Integer rate;
 
-    @Column(name = "\"Time\"")
-    private Instant time;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd HH:mm:ss",
+            locale = "vi_VN",
+            timezone = "Asia/Ho_Chi_Minh")
+    @Column(name = "Time")
+    private Date time;
 
     public Review() {
 
     }
 
-    public Instant getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Instant time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 
@@ -87,5 +93,9 @@ public class Review  implements Serializable {
 
     public void setReviewId(String id) {
         this.reviewId = id;
+    }
+
+    public String getProductId() {
+        return product.getProductId();
     }
 }

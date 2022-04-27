@@ -15,11 +15,15 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
         List<Order> orders = findAll();
 
-        orders.sort((c1, c2) -> c2.getOrderId().compareTo(c1.getOrderId()));
+        orders.sort((c1, c2) -> {
+            Long id1 = Long.parseLong(c1.getOrderId().substring(1));
+            Long id2 = Long.parseLong(c2.getOrderId().substring(1));
+            return id2.compareTo(id1);
+        });
 
         String lastOrderId = orders.get(0).getOrderId();
 
-        return "OD" + String.format("%05d", Integer.parseInt(lastOrderId.substring(2)) + 1);
+        return "OD" + String.format("%05d", Long.parseLong(lastOrderId.substring(2)) + 1);
     }
 
     Iterable<Order> findAllByUser(User user);

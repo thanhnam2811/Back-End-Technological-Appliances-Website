@@ -11,11 +11,17 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
     default String generateReviewId() {
         List<Review> reviews = findAll();
 
-        reviews.sort((c1, c2) -> c2.getReviewId().compareTo(c1.getReviewId()));
+        reviews.sort((c1, c2) -> {
+            Long id1 = Long.parseLong(c1.getReviewId().substring(1));
+            Long id2 = Long.parseLong(c2.getReviewId().substring(1));
+            return id2.compareTo(id1);
+        });
 
         String lastReviewId = reviews.get(0).getReviewId();
 
-        return "R" + String.format("%15d", Integer.parseInt(lastReviewId.substring(1)) + 1);
+        System.out.println(lastReviewId);
+
+        return "R" + String.format("%015d", Long.parseLong(lastReviewId.substring(1)) + 1);
     }
 
     Review findByReviewId(String id);

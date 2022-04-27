@@ -13,10 +13,14 @@ public interface BrandRepository extends JpaRepository<Brand, String> {
 
         List<Brand> brands = findAll();
 
-        brands.sort((c1, c2) -> c2.getBrandId().compareTo(c1.getBrandId()));
+        brands.sort((c1, c2) -> {
+            Long id1 = Long.parseLong(c1.getBrandId().substring(1));
+            Long id2 = Long.parseLong(c2.getBrandId().substring(1));
+            return id2.compareTo(id1);
+        });
 
         String lastBrandId = brands.get(0).getBrandId();
 
-        return "B" + String.format("%02d", Integer.parseInt(lastBrandId.substring(1)) + 1);
+        return "B" + String.format("%02d", Long.parseLong(lastBrandId.substring(1)) + 1);
     }
 }

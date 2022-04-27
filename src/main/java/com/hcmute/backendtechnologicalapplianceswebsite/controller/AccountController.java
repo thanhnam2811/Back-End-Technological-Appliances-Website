@@ -1,5 +1,6 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
+import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Account;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.AccountRepository;
@@ -29,7 +30,8 @@ public class AccountController {
     //    Create account
     @PostMapping("/accounts")
     public Account createAccount(@RequestBody Account account) {
-        User user = userRepository.findByUsername(account.getUsername());
+        User user = userRepository.findById(account.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + account.getUsername()));
         account.setUser(user);
         accountRepository.save(account);
         user.setAccount(account);

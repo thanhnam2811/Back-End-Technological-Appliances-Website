@@ -11,10 +11,14 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
     default String generateCategoryId() {
         List<Category> categories = findAll();
 
-        categories.sort((c1, c2) -> c2.getCategoryId().compareTo(c1.getCategoryId()));
+        categories.sort((c1, c2) -> {
+            Long id1 = Long.parseLong(c1.getCategoryId().substring(1));
+            Long id2 = Long.parseLong(c2.getCategoryId().substring(1));
+            return id2.compareTo(id1);
+        });
 
         String lastCategoryId = categories.get(0).getCategoryId();
 
-        return "C" + String.format("%02d", Integer.parseInt(lastCategoryId.substring(1)) + 1);
+        return "C" + String.format("%02d", Long.parseLong(lastCategoryId.substring(1)) + 1);
     }
 }
