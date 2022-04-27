@@ -70,14 +70,11 @@ public class ReviewController {
     //    Update review
     @PutMapping("/reviews/{id}")
     public ResponseEntity<Review> updateReview(@PathVariable String id, @RequestBody Review review) {
-        Review _review = reviewRepository.findByReviewId(id);
-        if (_review == null)
-            throw new ResourceNotFoundException("Review not found with id: " + id);
+        Review _review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
         _review.setContent(review.getContent());
         _review.setRate(review.getRate());
         _review.setTime(review.getTime());
-        _review.setProduct(review.getProduct());
-        _review.setUser(review.getUser());
         reviewRepository.save(_review);
         return ResponseEntity.ok(_review);
     }
