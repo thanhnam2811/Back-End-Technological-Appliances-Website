@@ -17,7 +17,6 @@ public class OrderDetail implements Serializable {
     @JoinColumn(name = "OrderId", nullable = false)
     private Order order;
 
-    @JsonIgnore
     @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ProductId", nullable = false)
