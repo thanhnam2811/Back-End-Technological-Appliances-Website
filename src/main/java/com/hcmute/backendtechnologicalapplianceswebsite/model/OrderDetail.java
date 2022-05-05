@@ -11,13 +11,11 @@ public class OrderDetail implements Serializable {
     @EmbeddedId
     private OrderDetailId id;
 
-    @JsonIgnore
     @MapsId("orderId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "OrderId", nullable = false)
     private Order order;
 
-    @JsonIgnore
     @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ProductId", nullable = false)
