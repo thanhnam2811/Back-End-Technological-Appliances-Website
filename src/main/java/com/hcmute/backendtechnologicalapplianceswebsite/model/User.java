@@ -11,6 +11,11 @@ import java.util.Set;
 @Entity
 @Table(name = "Users")
 public class User implements Serializable {
+    @JsonIgnore
+    public static final boolean MALE = true;
+    @JsonIgnore
+    public static final boolean FEMALE = false;
+
     @Id
     @Column(name = "Username", nullable = false, length = 40)
     private String username;
@@ -24,6 +29,16 @@ public class User implements Serializable {
     @Column(name = "PhoneNumber", length = 25)
     private String phoneNumber;
 
+    public User(String username, String name, String email, String phoneNumber, LocalDate dateOfBirth, String address, Boolean gender) {
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.gender = gender;
+    }
+
     @Column(name = "DateOfBirth")
     private LocalDate dateOfBirth;
 
@@ -32,9 +47,6 @@ public class User implements Serializable {
 
     @Column(name = "Gender")
     private Boolean gender;
-
-    @Column(name = "Role")
-    private Integer role;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -51,6 +63,10 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Order> orders = new LinkedHashSet<>();
+
+    public User() {
+
+    }
 
     public Set<Order> getOrders() {
         return orders;
@@ -82,14 +98,6 @@ public class User implements Serializable {
 
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
-    }
-
-    public Integer getRole() {
-        return role;
-    }
-
-    public void setRole(Integer role) {
-        this.role = role;
     }
 
     public Boolean getGender() {

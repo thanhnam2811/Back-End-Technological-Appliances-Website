@@ -60,15 +60,20 @@ public class CartDetailController {
         return ResponseEntity.ok(cartDetail);
     }
 
-    @PutMapping("/cart-details/{username}/{productId}")
-    public ResponseEntity<CartDetail> updateCartDetail(@PathVariable String username, @PathVariable String productId, @RequestBody CartDetail cart) {
-        CartDetailId cartDetailId = new CartDetailId(username, productId);
-        CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartDetailId));
+    @PutMapping("/cart-details")
+    public CartDetail updateCartDetail(@RequestBody CartDetail cartDetail) {
+        User user = userRepository.findById(cartDetail.getId().getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + cartDetail.getId().getUsername()));
+        Product product = productRepository.findById(cartDetail.getId().getProductId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + cartDetail.getId().getProductId()));
 
-        cartDetail.setQuantity(cart.getQuantity());
-        cartDetailRepository.save(cartDetail);
-        return ResponseEntity.ok(cartDetail);
+        if (cartDetailRepository.existsById(cartDetail.getId())) {
+            CartDetail newCartDetail = cartDetailRepository.findById(cartDetail.getId()).get();
+            newCartDetail.setQuantity(newCartDetail.getQuantity() + cartDetail.getQuantity());
+            return cartDetailRepository.save(newCartDetail);
+        } else {
+            throw new ResourceNotFoundException("Cart not found with id: " + cartDetail.getId());
+        }
     }
 
 

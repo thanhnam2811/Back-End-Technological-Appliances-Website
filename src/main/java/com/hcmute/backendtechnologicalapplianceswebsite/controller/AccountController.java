@@ -5,7 +5,10 @@ import com.hcmute.backendtechnologicalapplianceswebsite.model.Account;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.AccountRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
 @RestController
@@ -19,13 +22,11 @@ public class AccountController {
         this.userRepository = userRepository;
     }
 
-    /* PRIVATE
     // Get All Accounts
     @GetMapping("/accounts")
-    public Iterable<Account> getAllAccounts() {
+    public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
-    */
 
     //    Create account
     @PostMapping("/accounts")
@@ -39,39 +40,30 @@ public class AccountController {
         return account;
     }
 
-    /* PRIVATE
     //    Get account by username
     @GetMapping("/accounts/{username}")
     public ResponseEntity<Account> getAccountByUsername(@PathVariable String username) {
-        Account account =  accountRepository.findByUsername(username);
-        if (account == null)
-            throw new ResourceNotFoundException("Account not found with username: " + username);
+        Account account =  accountRepository.findById(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with username: " + username));
         return ResponseEntity.ok(account);
     }
-    */
 
-    /* PRIVATE
     //    Update account
     @PutMapping("/accounts/{username}")
     public ResponseEntity<Account> updateAccount(@PathVariable String username, @RequestBody Account account) throws Throwable {
-        Account _account = (Account) accountRepository.findByUsername(username);
-        if (_account == null)
-            throw new ResourceNotFoundException("Account not found with username: " + username);
+        Account _account = accountRepository.findById(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with username: " + username));
         _account.setPassword(account.getPassword());
         accountRepository.save(_account);
         return ResponseEntity.ok(_account);
     }
-    */
 
-    /* PRIVATE
     //    Delete account
     @DeleteMapping("/accounts/{username}")
     public ResponseEntity<?> deleteAccount(@PathVariable String username) {
-        Account account = (Account) accountRepository.findByUsername(username);
-        if (account == null)
-            throw new ResourceNotFoundException("Account not found with username: " + username);
+        Account account = accountRepository.findById(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with username: " + username));
         accountRepository.delete(account);
         return ResponseEntity.ok().build();
     }
-    */
 }

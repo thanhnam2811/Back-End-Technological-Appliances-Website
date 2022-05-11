@@ -2,15 +2,42 @@ package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
 @Table(name = "Account")
-public class Account implements Serializable, UserDetails {
+public class Account implements Serializable {
+    @JsonIgnore
+    public static final int ROLE_USER = 0;
+    @JsonIgnore
+    public static final int ROLE_ADMIN = 1;
+
+    public Account() {
+
+    }
+
+    public Account(String username, String password, Integer role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    @JsonIgnore
+    public static String getRoleName(int role) {
+        if (role == ROLE_USER) {
+            return "ROLE_USER";
+        } else if (role == ROLE_ADMIN) {
+            return "ROLE_ADMIN";
+        }
+        return "";
+    }
+
     @Id
     @Column(name = "Username", nullable = false, length = 40)
     private String username;
@@ -24,16 +51,15 @@ public class Account implements Serializable, UserDetails {
     @Column(name = "Password", nullable = false, length = 40)
     private String password;
 
-    public static Account build(org.springframework.security.core.userdetails.User user) {
-        Account account = new Account();
-        account.setUsername(user.getUsername());
-        account.setPassword(user.getPassword());
-        return account;
+    @Column(name = "Role")
+    private Integer role;
+
+    public Integer getRole() {
+        return role;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     public String getPassword() {
@@ -56,26 +82,6 @@ public class Account implements Serializable, UserDetails {
         return username;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
     public void setUsername(String id) {
         this.username = id;
     }
@@ -83,5 +89,12 @@ public class Account implements Serializable, UserDetails {
     @Override
     public String toString() {
         return "Account: username=" + username + ", password=" + password;
+    }
+
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(getRoleName(role)));
+        return authorities;
     }
 }
