@@ -91,6 +91,30 @@ public class ProductController {
         return productRepository.findAll(Sort.by("saleDate", "ProductId").descending()).subList(0, quantity);
     }
 
+    // Get min price
+    @GetMapping(value = "/products/price/min")
+    public Double getMinPrice() {
+        List<Product> products = productRepository.findAll();
+        Double minPrice = products.get(0).getPrice();
+        for (Product product : products) {
+            if (product.getPrice() < minPrice)
+                minPrice = product.getPrice();
+        }
+        return minPrice;
+    }
+
+    // Get max price
+    @GetMapping(value = "/products/price/max")
+    public Double getMaxPrice() {
+        List<Product> products = productRepository.findAll();
+        Double maxPrice = products.get(0).getPrice();
+        for (Product product : products) {
+            if (product.getPrice() > maxPrice)
+                maxPrice = product.getPrice();
+        }
+        return maxPrice;
+    }
+
     //    Get product by id
     @GetMapping("/products/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable String id) {
