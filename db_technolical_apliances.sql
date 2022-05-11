@@ -20,8 +20,7 @@ CREATE TABLE Users
     PhoneNumber VARCHAR(25) UNIQUE,
     DateOfBirth DATE,
     Address     NVARCHAR(200) NOT NULL,
-    Gender      BIT,
-    Role        INTEGER
+    Gender      BIT
 )
 GO
 CREATE TABLE Account
@@ -29,8 +28,9 @@ CREATE TABLE Account
     Username VARCHAR(40) FOREIGN KEY REFERENCES dbo.Users (Username)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    Password VARCHAR(40) NOT NULL,
-    PRIMARY KEY (Username)
+    Password VARCHAR(60) NOT NULL,
+    PRIMARY KEY (Username),
+    Role     INTEGER NOT NULL DEFAULT 0
 )
 GO
 CREATE TABLE Categories
@@ -122,7 +122,9 @@ CREATE TABLE Orders
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     Status        NVARCHAR(200),
-    CouponId      INTEGER,
+    CouponId      VARCHAR(40) FOREIGN KEY REFERENCES dbo.Coupons (CouponId)
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
     DiscountPrice FLOAT
 )
 GO
@@ -168,20 +170,12 @@ GO
 DROP PROC IF EXISTS sp_insertUser
 GO
 CREATE PROC sp_insertUser(@Username VARCHAR(40), @Name NVARCHAR(100), @Email VARCHAR(100), @PhoneNumber VARCHAR(25),
-                          @DateOfBirth DATE, @Address NVARCHAR(200), @Gender BIT, @Role INTEGER)
+                          @DateOfBirth DATE, @Address NVARCHAR(200), @Gender BIT)
 AS
-INSERT INTO dbo.Users(Username, Name, Email, PhoneNumber, DateOfBirth, Address, Gender, Role)
-VALUES (@Username, @Name, @Email, @PhoneNumber, @DateOfBirth, @Address, @Gender, @Role)
+INSERT INTO dbo.Users(Username, Name, Email, PhoneNumber, DateOfBirth, Address, Gender)
+VALUES (@Username, @Name, @Email, @PhoneNumber, @DateOfBirth, @Address, @Gender)
 GO
 -- 1.3 UpdateRole
-DROP PROC IF EXISTS sp_updateRoleUser
-GO
-CREATE PROC sp_updateRoleUser(@Username VARCHAR(40), @Role INTEGER)
-AS
-UPDATE dbo.Users
-SET Role=@Role
-WHERE Username = @Username
-GO
 -- 1.4 UpdateUser
 DROP PROC IF EXISTS sp_updateUser
 GO
@@ -251,7 +245,7 @@ AS
 SELECT *
 FROM dbo.Categories
 GO
--- 3.2 GetById 
+-- 3.2 GetById
 DROP PROC IF EXISTS sp_getByIdCategoty
 GO
 CREATE PROC sp_getByIdCategoty(@CategoryId VARCHAR(20))
@@ -307,7 +301,8 @@ GO
 -- 4.3 InsertBrand
 DROP PROC IF EXISTS sp_insertBrand
 GO
-CREATE PROC sp_insertBrand(@BrandId VARCHAR(20), @Name NVARCHAR(100), @Email VARCHAR(100), @Logo NVARCHAR(200), @Location NVARCHAR(200))
+CREATE PROC sp_insertBrand(@BrandId VARCHAR(20), @Name NVARCHAR(100), @Email VARCHAR(100), @Logo NVARCHAR(200),
+                           @Location NVARCHAR(200))
 AS
 INSERT INTO dbo.Brands(BrandId, Name, Email, Logo, Location)
 VALUES (@BrandId, @Name, @Email, @Logo, @Location)
@@ -355,8 +350,7 @@ GO
 -- 5.3 InsertProduct
 DROP PROC IF EXISTS sp_insertProduct
 GO
-CREATE PROC sp_insertProduct @ProductId VARCHAR(20),
-                             @Name NVARCHAR(100),
+CREATE PROC sp_insertProduct @Name NVARCHAR(100),
                              @CategoryId VARCHAR(20),
                              @BrandId VARCHAR(20),
                              @Image NVARCHAR(MAX),
@@ -466,7 +460,7 @@ DELETE dbo.Products
 WHERE ProductId = @ProductId
 GO
 
--- 6 Review 
+-- 6 Review
 -- 6.1 GetAllByProductId
 DROP PROC IF EXISTS sp_getByProductId
 GO
@@ -882,7 +876,7 @@ create trigger after_insert_update_CartDetails
     where new.ProductId = p.ProductId
     if (@Quantity > @QuantityInStock)
         begin
-            raiserror(N'Quantity not valid! ProductId: %s, Quantity: %d, QuantityInStock: %d', 16, 1, @ProductId, @Quantity, @QuantityInStock)
+            raiserror (N'Quantity not valid! ProductId: %s, Quantity: %d, QuantityInStock: %d', 16, 1, @ProductId, @Quantity, @QuantityInStock)
             rollback;
         end
 go
@@ -918,33 +912,62 @@ end
 go
 
 -- SAMPLE DATAS --
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender], [Role]) VALUES (N'nam', N'Thành Nam', N'thanhnam.thai01@gmail.com', N'0981771024', CAST(N'2001-11-28' AS Date), N'Bến Tre', 1, 0)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'nam', N'Thành Nam', N'thanhnam.thai01@gmail.com', N'0981771024', CAST(N'2001-11-28' AS Date), N'Bến Tre', 1)
 GO
-INSERT [dbo].[Account] ([Username], [Password]) VALUES (N'nam', N'nam')
+INSERT [dbo].[Account] ([Username], [Password])
+VALUES (N'nam', N'nam')
 GO
-INSERT [dbo].[Categories] ([CategoryId], [Name]) VALUES (N'C01', N'Laptop')
+INSERT [dbo].[Categories] ([CategoryId], [Name])
+VALUES (N'C01', N'Laptop')
 GO
-INSERT [dbo].[Categories] ([CategoryId], [Name]) VALUES (N'C02', N'Smart Phone')
+INSERT [dbo].[Categories] ([CategoryId], [Name])
+VALUES (N'C02', N'Smart Phone')
 GO
-INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location]) VALUES (N'B01', N'Samsung', N'samsung@email.com', N'link', N'Korea')
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
+VALUES (N'B01', N'Samsung', N'samsung@email.com', N'link', N'Korea')
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00001', N'Galaxy S21', N'C02', N'B01', N'link', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00001', N'Galaxy S21', N'C02', N'B01', N'link', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
+        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00002', N'Galaxy S21', NULL, NULL, N'link', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00002', N'Galaxy S21', NULL, NULL, N'link', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
+        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00003', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00003', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
+        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00004', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00004', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
+        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[Reviews] ([ReviewId], [Username], [ProductId], [Content], [Rate], [Time]) VALUES (N'R00001', N'nam', N'P00001', N'Sản phẩm tẹt zời', 5, CAST(N'2022-03-26T07:28:32.000' AS DateTime))
+INSERT [dbo].[Reviews] ([ReviewId], [Username], [ProductId], [Content], [Rate], [Time])
+VALUES (N'R00001', N'nam', N'P00001', N'Sản phẩm tẹt zời', 5, CAST(N'2022-03-26T07:28:32.000' AS DateTime))
 GO
-INSERT [dbo].[Deliveries] ([DeliveryId], [Name], [Email], [PhoneNumber], [Location]) VALUES (N'D01', N'GiaoHanhNhanh', N'GHN@emai.com', N'0998877666', N'TP.HCM')
+INSERT [dbo].[Deliveries] ([DeliveryId], [Name], [Email], [PhoneNumber], [Location])
+VALUES (N'D01', N'GiaoHanhNhanh', N'GHN@emai.com', N'0998877666', N'TP.HCM')
 GO
-INSERT [dbo].[Orders] ([OrderId], [Username], [Name], [Address], [PhoneNumber], [PurchaseDate], [TotalPrices], [DeliveryId], [Status], [CouponId], [DiscountPrice]) VALUES (N'O00001', N'nam', N'Nam', N'Bến Tre', N'0981771024', CAST(N'2022-03-24T00:00:00.000' AS DateTime), 50000000, N'D01', N'waiting', NULL, NULL)
+INSERT [dbo].[Orders] ([OrderId], [Username], [Name], [Address], [PhoneNumber], [PurchaseDate], [TotalPrices],
+                       [DeliveryId], [Status], [CouponId], [DiscountPrice])
+VALUES (N'O00001', N'nam', N'Nam', N'Bến Tre', N'0981771024', CAST(N'2022-03-24T00:00:00.000' AS DateTime), 50000000,
+        N'D01', N'waiting', NULL, NULL)
 GO
-INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity]) VALUES (N'nam', N'P00001', 2)
+INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity])
+VALUES (N'nam', N'P00001', 2)
 GO
-INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity]) VALUES (N'nam', N'P00002', 5)
+INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity])
+VALUES (N'nam', N'P00002', 5)
 GO
-INSERT [dbo].[OrderDetails] ([OrderId], [ProductId], [Quantity], [Price], [TotalPrice]) VALUES (N'O00001', N'P00001', 2, 25000000, 50000000)
+INSERT [dbo].[OrderDetails] ([OrderId], [ProductId], [Quantity], [Price], [TotalPrice])
+VALUES (N'O00001', N'P00001', 2, 25000000, 50000000)
 GO

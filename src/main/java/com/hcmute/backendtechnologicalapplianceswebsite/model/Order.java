@@ -1,7 +1,5 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -26,10 +24,6 @@ public class Order implements Serializable {
     @Column(name = "PhoneNumber", nullable = false, length = 20)
     private String phoneNumber;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,
-            pattern = "yyyy-MM-dd HH:mm:ss",
-            locale = "vi_VN",
-            timezone = "Asia/Ho_Chi_Minh")
     @Column(name = "PurchaseDate")
     private Date purchaseDate;
 

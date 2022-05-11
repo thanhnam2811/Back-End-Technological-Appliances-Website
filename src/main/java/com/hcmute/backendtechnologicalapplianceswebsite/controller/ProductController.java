@@ -8,11 +8,13 @@ import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.BrandRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.CategoryRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
@@ -75,7 +77,18 @@ public class ProductController {
         if (category == null)
             throw new ResourceNotFoundException("Category not found with id: " + product.getCategory().getCategoryId());
         product.setCategory(category);
+
+        if (product.getSaleDate() == null) {
+            product.setSaleDate(null);
+        }
+
         return productRepository.save(product);
+    }
+
+    // Get top products newest
+    @GetMapping(value = "/products/newest/{quantity}")
+    public List<Product> getTopProductsNewest(@PathVariable Integer quantity) {
+        return productRepository.findAll(Sort.by("saleDate", "ProductId").descending()).subList(0, quantity);
     }
 
     //    Get product by id

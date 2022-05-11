@@ -32,10 +32,6 @@ public class Review  implements Serializable {
     @Column(name = "Rate")
     private Integer rate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,
-            pattern = "yyyy-MM-dd HH:mm:ss",
-            locale = "vi_VN",
-            timezone = "Asia/Ho_Chi_Minh")
     @Column(name = "Time")
     private Date time;
 

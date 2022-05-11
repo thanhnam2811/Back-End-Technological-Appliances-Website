@@ -1,11 +1,10 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -35,7 +34,7 @@ public class Product implements Serializable {
     private Integer quantity;
 
     @Column(name = "SaleDate")
-    private Instant saleDate;
+    private Date saleDate;
 
     @Column(name = "RAM")
     private Integer ram;
@@ -206,11 +205,11 @@ public class Product implements Serializable {
         this.ram = ram;
     }
 
-    public Instant getSaleDate() {
+    public Date getSaleDate() {
         return saleDate;
     }
 
-    public void setSaleDate(Instant saleDate) {
+    public void setSaleDate(Date saleDate) {
         this.saleDate = saleDate;
     }
 
