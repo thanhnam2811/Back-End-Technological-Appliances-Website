@@ -15,10 +15,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.http.HttpMethod.GET;
 
-@Configuration @EnableWebSecurity @RequiredArgsConstructor
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -37,22 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/technological_appliances/login");
 
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf().disable()
+                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                .anyRequest().permitAll();
 
-        http.authorizeRequests().antMatchers("/api/technological_appliances/**").permitAll();
-
-        http.authorizeRequests()
-                .antMatchers("/api/technological_appliances/cart-details/**").hasAnyRole(ROLE_USER, ROLE_ADMIN)
-                .antMatchers("/api/technological_appliances/order-details/**").hasAnyRole(ROLE_USER, ROLE_ADMIN)
-                .antMatchers("/api/technological_appliances/orders/**").hasAnyRole(ROLE_USER, ROLE_ADMIN)
-                .antMatchers(GET, "/api/technological_appliances/users").hasAnyAuthority(ROLE_ADMIN)
-                .antMatchers(GET, "/api/technological_appliances/users/{username}").hasAnyAuthority(ROLE_USER, ROLE_ADMIN)
-                .antMatchers(GET, "/api/technological_appliances/users/{username}/role").hasAnyAuthority(ROLE_ADMIN)
-                .antMatchers(GET, "/api/technological_appliances/account").hasAnyAuthority(ROLE_ADMIN);
-
-        http.addFilter(customAuthenticationFilter);
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilter(customAuthenticationFilter);
+//        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
