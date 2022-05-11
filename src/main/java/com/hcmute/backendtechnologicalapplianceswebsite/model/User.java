@@ -155,4 +155,8 @@ public class User implements Serializable {
     public void setUsername(String id) {
         this.username = id;
     }
+
+    public String getRole() {
+        return Account.getRoleName(account.getRole());
+    }
 }

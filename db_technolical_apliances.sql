@@ -56,7 +56,7 @@ CREATE TABLE Products
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     BrandId     VARCHAR(20) FOREIGN KEY REFERENCES dbo.Brands (BrandId)
-        ON DELETE CASCADE
+        ON DELETE SET NULL
         ON UPDATE CASCADE,
     Image       NVARCHAR(MAX),
     Quantity    INTEGER,
