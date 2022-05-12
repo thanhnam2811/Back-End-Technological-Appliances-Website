@@ -38,7 +38,7 @@ public class Order implements Serializable {
     private String status;
 
     @Column(name = "CouponId")
-    private Integer couponId;
+    private String couponId;
 
     @Column(name = "DiscountPrice")
     private Double discountPrice;
@@ -51,11 +51,11 @@ public class Order implements Serializable {
         this.discountPrice = discountPrice;
     }
 
-    public Integer getCouponId() {
+    public String getCouponId() {
         return couponId;
     }
 
-    public void setCouponId(Integer couponId) {
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
 
