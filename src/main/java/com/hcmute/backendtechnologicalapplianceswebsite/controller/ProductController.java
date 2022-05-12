@@ -98,6 +98,10 @@ public class ProductController {
     public Iterable<Product> getTopFeature() {
         return productRepository.gettopfeature();
     }
+    @GetMapping(value = "/products/hottrend")
+    public Iterable<Product> getHotTrend() {
+        return productRepository.gethottrend();
+    }
     // Get min price
     @GetMapping(value = "/products/price/min")
     public Double getMinPrice() {
