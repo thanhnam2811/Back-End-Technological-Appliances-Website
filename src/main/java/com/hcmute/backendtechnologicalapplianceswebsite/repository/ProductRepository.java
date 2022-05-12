@@ -33,14 +33,9 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     @Query(value = "select top(3)  * from Products,(select ProductId,sum(Quantity)as Sum from OrderDetails group by ProductId)as temp where temp.ProductId=Products.ProductId order by sum desc", nativeQuery = true)
     Iterable<Product> gettopseller();
-<<<<<<< Updated upstream
-
-    @Query(value = "select * from Products,(select ProductId,AVG(Rate) as Sum from Reviews group by ProductId)as temp where temp.ProductId=Products.ProductId", nativeQuery = true)
-=======
     @Query(value = "select top(3) * from Products,(select ProductId,AVG(Rate) as Sum from Reviews group by ProductId)as temp where temp.ProductId=Products.ProductId order by sum desc", nativeQuery = true)
     Iterable<Product> gethottrend();
     @Query(value = "select top(3) * from Products order by Price DESC",nativeQuery = true)
->>>>>>> Stashed changes
     Iterable<Product> gettopfeature();
 
 }
