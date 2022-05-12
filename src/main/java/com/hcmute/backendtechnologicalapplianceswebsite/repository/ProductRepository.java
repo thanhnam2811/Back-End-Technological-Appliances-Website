@@ -1,9 +1,8 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.repository;
 
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
-import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.MyUtils;
+import com.hcmute.backendtechnologicalapplianceswebsite.utils.MyUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -34,6 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     @Query(value = "select  * from Products,(select ProductId,sum(Quantity)as Sum from OrderDetails group by ProductId)as temp where temp.ProductId=Products.ProductId", nativeQuery = true)
     Iterable<Product> gettopseller();
+
     @Query(value = "select * from Products,(select ProductId,AVG(Rate) as Sum from Reviews group by ProductId)as temp where temp.ProductId=Products.ProductId", nativeQuery = true)
     Iterable<Product> gettopfeature();
 

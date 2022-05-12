@@ -1,9 +1,8 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.repository;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Review;
-import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.MyUtils;
+import com.hcmute.backendtechnologicalapplianceswebsite.utils.MyUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
