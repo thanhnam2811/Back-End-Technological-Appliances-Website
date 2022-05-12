@@ -61,11 +61,11 @@ public class CartDetailController {
     }
 
     @PutMapping("/cart-details/{username}/{productId}")
-    public CartDetail updateCartDetail(@RequestBody Integer quantity, @PathVariable String username, @PathVariable String productId) {
+    public CartDetail updateCartDetail(@RequestBody CartDetail data, @PathVariable String username, @PathVariable String productId) {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartDetailId));
-        cartDetail.setQuantity(quantity);
+        cartDetail.setQuantity(data.getQuantity());
         return cartDetailRepository.save(cartDetail);
     }
 
