@@ -90,7 +90,14 @@ public class ProductController {
     public List<Product> getTopProductsNewest(@PathVariable Integer quantity) {
         return productRepository.findAll(Sort.by("saleDate", "ProductId").descending()).subList(0, quantity);
     }
-
+    @GetMapping(value = "/products/topseller")
+    public Iterable<Product> getTopSeller() {
+        return productRepository.gettopseller();
+    }
+    @GetMapping(value = "/products/topfeature")
+    public Iterable<Product> getTopFeature() {
+        return productRepository.gettopfeature();
+    }
     // Get min price
     @GetMapping(value = "/products/price/min")
     public Double getMinPrice() {
