@@ -15,6 +15,10 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
 
         List<Review> reviews = findAll();
 
+        if (reviews.size() == 0) {
+            return PREFIX + "01"; // first review
+        }
+
         reviews.sort((c1, c2) -> {
             Long id1 = Long.parseLong(c1.getReviewId().substring(index));
             Long id2 = Long.parseLong(c2.getReviewId().substring(index));

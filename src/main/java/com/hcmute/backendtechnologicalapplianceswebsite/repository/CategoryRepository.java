@@ -15,6 +15,10 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
 
         List<Category> categories = findAll();
 
+        if (categories.size() == 0) {
+            return PREFIX + "01"; // first category
+        }
+
         categories.sort((c1, c2) -> {
             Long id1 = Long.parseLong(c1.getCategoryId().substring(PREFIX.length()));
             Long id2 = Long.parseLong(c2.getCategoryId().substring(PREFIX.length()));

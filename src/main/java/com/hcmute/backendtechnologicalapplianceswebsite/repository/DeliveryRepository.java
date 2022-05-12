@@ -15,6 +15,10 @@ public interface DeliveryRepository extends JpaRepository<Delivery, String> {
 
         List<Delivery> deliveries = findAll();
 
+        if (deliveries.size() == 0) {
+            return PREFIX + "01"; // first delivery
+        }
+
         deliveries.sort((c1, c2) -> {
             Long id1 = Long.parseLong(c1.getDeliveryId().substring(index));
             Long id2 = Long.parseLong(c2.getDeliveryId().substring(index));

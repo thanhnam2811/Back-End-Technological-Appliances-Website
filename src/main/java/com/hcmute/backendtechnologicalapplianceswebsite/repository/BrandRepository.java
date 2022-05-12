@@ -16,6 +16,10 @@ public interface BrandRepository extends JpaRepository<Brand, String> {
 
         List<Brand> brands = findAll();
 
+        if (brands.size() == 0) {
+            return PREFIX + "01"; // first brand
+        }
+
         brands.sort((c1, c2) -> {
             Long id1 = Long.parseLong(c1.getBrandId().substring(index));
             Long id2 = Long.parseLong(c2.getBrandId().substring(index));

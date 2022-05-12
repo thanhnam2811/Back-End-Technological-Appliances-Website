@@ -18,6 +18,10 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
         List<Product> products = findAll();
 
+        if (products.size() == 0) {
+            return PREFIX + "01"; // first product
+        }
+
         products.sort((c1, c2) -> {
             Long id1 = Long.parseLong(c1.getProductId().substring(index));
             Long id2 = Long.parseLong(c2.getProductId().substring(index));

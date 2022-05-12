@@ -17,6 +17,10 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
         List<Order> orders = findAll();
 
+        if (orders.size() == 0) {
+            return PREFIX + "00001"; // first order
+        }
+
         orders.sort((c1, c2) -> {
             Long id1 = Long.parseLong(c1.getOrderId().substring(index));
             Long id2 = Long.parseLong(c2.getOrderId().substring(index));
