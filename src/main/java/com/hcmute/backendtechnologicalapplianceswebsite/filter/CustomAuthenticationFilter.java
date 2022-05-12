@@ -74,6 +74,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String, String> map = new HashMap<>();
         map.put(JWT_TOKEN_HEADER, token);
         map.put(JWT_REFRESH_TOKEN_HEADER, refreshToken);
+        map.put("role", user.getAuthorities().iterator().next().getAuthority());
         response.setContentType("application/json");
         new ObjectMapper().writeValue(response.getOutputStream(), map);
     }
