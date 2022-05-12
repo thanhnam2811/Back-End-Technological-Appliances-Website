@@ -3,6 +3,7 @@ package com.hcmute.backendtechnologicalapplianceswebsite.repository;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
+import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.MyUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,18 +13,21 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Product findByProductId(String id);
 
     default String generateProductId() {
+        String PREFIX = "P";
+        int index = PREFIX.length();
+        int length = 2;
 
         List<Product> products = findAll();
 
         products.sort((c1, c2) -> {
-            Long id1 = Long.parseLong(c1.getProductId().substring(1));
-            Long id2 = Long.parseLong(c2.getProductId().substring(1));
+            Long id1 = Long.parseLong(c1.getProductId().substring(index));
+            Long id2 = Long.parseLong(c2.getProductId().substring(index));
             return id2.compareTo(id1);
         });
 
         String lastProductId = products.get(0).getProductId();
 
-        return "P" + String.format("%05d", Long.parseLong(lastProductId.substring(1)) + 1);
+        return MyUtils.generateID(PREFIX, length, lastProductId);
     }
 
     Iterable<Product> findAllByBrand(Brand brand);
