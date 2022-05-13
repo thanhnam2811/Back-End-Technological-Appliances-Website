@@ -54,9 +54,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             List<String> publicPaths = new ArrayList<>();
             publicPaths.add(apiPath + "/login");
             publicPaths.add(apiPath + "/register");
+            publicPaths.add(apiPath + "/reset-password");
+            publicPaths.add(apiPath + "/forgot-password/**");
+
 
             for (String path : publicPaths) {
-                if (servletPath.equals(path)) {
+                if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
+                    return true;
+                } else if (servletPath.equals(path)) {
                     return true;
                 }
             }

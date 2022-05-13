@@ -30,7 +30,16 @@ CREATE TABLE Account
         ON UPDATE CASCADE,
     Password VARCHAR(60) NOT NULL,
     PRIMARY KEY (Username),
-    Role     INTEGER NOT NULL DEFAULT 0
+    Role     INTEGER     NOT NULL DEFAULT 0
+)
+CREATE TABLE PasswordResetToken
+(
+    Id       INTEGER PRIMARY KEY IDENTITY,
+    Username VARCHAR(40) FOREIGN KEY REFERENCES dbo.Users (Username)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    Token    VARCHAR(60) NOT NULL,
+    Expiry   DATETIME    NOT NULL
 )
 GO
 CREATE TABLE Categories
@@ -914,51 +923,90 @@ go
 -- SAMPLE DATAS --
 USE [db_technological_appliances]
 GO
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'admin', N'admin', N'admin@email.com', N'0999999999', CAST(N'2001-01-01' AS Date), N'TP.HCM', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'admin', N'admin', N'admin@email.com', N'0999999999', CAST(N'2001-01-01' AS Date), N'TP.HCM', 1)
 GO
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'nam', N'Thái Thành Nam', N'nam@email.com', N'0981771024', CAST(N'2001-11-28' AS Date), N'Bến Tre', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'nam', N'Thái Thành Nam', N'nam@email.com', N'0981771024', CAST(N'2001-11-28' AS Date), N'Bến Tre', 1)
 GO
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'phuong', N'Trịnh Xuân Phương', N'phuong@email.com', N'0999999995', CAST(N'2001-01-01' AS Date), N'Bến Tre', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'phuong', N'Trịnh Xuân Phương', N'phuong@email.com', N'0999999995', CAST(N'2001-01-01' AS Date), N'Bến Tre', 1)
 GO
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'tan', N'Cao Hoài Tấn', N'tan@email.com', N'0999999998', CAST(N'2001-01-01' AS Date), N'Bến Tre', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'tan', N'Cao Hoài Tấn', N'tan@email.com', N'0999999998', CAST(N'2001-01-01' AS Date), N'Bến Tre', 1)
 GO
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'toan', N'Nguyễn Phúc Thanh Toàn', N'toan@email.com', N'0999999996', CAST(N'2001-01-01' AS Date), N'Tây Ninh', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'toan', N'Nguyễn Phúc Thanh Toàn', N'toan@email.com', N'0999999996', CAST(N'2001-01-01' AS Date), N'Tây Ninh',
+        1)
 GO
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'trung', N'Nguyễn Ngọc Trung', N'trung@email.com', N'0999999997', CAST(N'2001-01-01' AS Date), N'Phú Yên', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'trung', N'Nguyễn Ngọc Trung', N'trung@email.com', N'0999999997', CAST(N'2001-01-01' AS Date), N'Phú Yên', 1)
 GO
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'admin', N'$2a$10$EIJuGNzAYSpm0neUemi.3.eWA44XqltUMszWRqZo64my/IF3tCZI.', 1)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'admin', N'$2a$10$EIJuGNzAYSpm0neUemi.3.eWA44XqltUMszWRqZo64my/IF3tCZI.', 1)
 GO
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'nam', N'$2a$10$j5aLIfYSOIbU2Ihkpti2KOh9o4b2J64zvFIRpvUwpy7d/h0bXxO7q', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'nam', N'$2a$10$j5aLIfYSOIbU2Ihkpti2KOh9o4b2J64zvFIRpvUwpy7d/h0bXxO7q', 0)
 GO
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'phuong', N'$2a$10$77/xC5K89B3z7SecIu1Wm.PSDnw0qu0z6y6poYQjXTgsLqNeVVCbm', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'phuong', N'$2a$10$77/xC5K89B3z7SecIu1Wm.PSDnw0qu0z6y6poYQjXTgsLqNeVVCbm', 0)
 GO
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'tan', N'$2a$10$FGRitRqmuYpQq8KuGAA4quTRVgBt9LvnEUsF7CyScwa4efCRspXaW', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'tan', N'$2a$10$FGRitRqmuYpQq8KuGAA4quTRVgBt9LvnEUsF7CyScwa4efCRspXaW', 0)
 GO
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'toan', N'$2a$10$dk8yjCKXGgQ.rCKjoGkizetL52Ay..w6IB80Kx7A/Lk161DrXykqy', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'toan', N'$2a$10$dk8yjCKXGgQ.rCKjoGkizetL52Ay..w6IB80Kx7A/Lk161DrXykqy', 0)
 GO
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'trung', N'$2a$10$/osmVYwaRKMrNydGUcmRa.Ho1NScl3JuVuT4YTSTHlaYoP.xsUdke', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'trung', N'$2a$10$/osmVYwaRKMrNydGUcmRa.Ho1NScl3JuVuT4YTSTHlaYoP.xsUdke', 0)
 GO
-INSERT [dbo].[Categories] ([CategoryId], [Name]) VALUES (N'C01', N'Laptop')
+INSERT [dbo].[Categories] ([CategoryId], [Name])
+VALUES (N'C01', N'Laptop')
 GO
-INSERT [dbo].[Categories] ([CategoryId], [Name]) VALUES (N'C02', N'Smart Phone')
+INSERT [dbo].[Categories] ([CategoryId], [Name])
+VALUES (N'C02', N'Smart Phone')
 GO
-INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location]) VALUES (N'B01', N'Samsung', N'samsung@email.com', N'link', N'Korea')
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
+VALUES (N'B01', N'Samsung', N'samsung@email.com', N'link', N'Korea')
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00001', N'Galaxy S21', N'C02', N'B01', N'link', 3, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 2500000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00001', N'Galaxy S21', N'C02', N'B01', N'link', 3, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
+        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 2500000)
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00002', N'Galaxy S21', NULL, NULL, N'link', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00002', N'Galaxy S21', NULL, NULL, N'link', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
+        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00003', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00003', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
+        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00004', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 26000000)
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00004', N'Galaxy S21', N'C02', N'B01', N'link', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8',
+        N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 26000000)
 GO
-INSERT [dbo].[Reviews] ([ReviewId], [Username], [ProductId], [Content], [Rate], [Time]) VALUES (N'R00001', N'nam', N'P00001', N'Sản phẩm tẹt zời', 5, CAST(N'2022-03-26T07:28:32.000' AS DateTime))
+INSERT [dbo].[Reviews] ([ReviewId], [Username], [ProductId], [Content], [Rate], [Time])
+VALUES (N'R00001', N'nam', N'P00001', N'Sản phẩm tẹt zời', 5, CAST(N'2022-03-26T07:28:32.000' AS DateTime))
 GO
-INSERT [dbo].[Deliveries] ([DeliveryId], [Name], [Email], [PhoneNumber], [Location]) VALUES (N'D01', N'GiaoHanhNhanh', N'GHN@emai.com', N'0998877666', N'TP.HCM')
+INSERT [dbo].[Deliveries] ([DeliveryId], [Name], [Email], [PhoneNumber], [Location])
+VALUES (N'D01', N'GiaoHanhNhanh', N'GHN@emai.com', N'0998877666', N'TP.HCM')
 GO
-INSERT [dbo].[Orders] ([OrderId], [Username], [Name], [Address], [PhoneNumber], [PurchaseDate], [TotalPrices], [DeliveryId], [Status], [CouponId], [DiscountPrice]) VALUES (N'O00001', N'nam', N'Nam', N'Bến Tre', N'0981771024', CAST(N'2022-03-24T00:00:00.000' AS DateTime), 50000000, N'D01', N'waiting', NULL, NULL)
+INSERT [dbo].[Orders] ([OrderId], [Username], [Name], [Address], [PhoneNumber], [PurchaseDate], [TotalPrices],
+                       [DeliveryId], [Status], [CouponId], [DiscountPrice])
+VALUES (N'O00001', N'nam', N'Nam', N'Bến Tre', N'0981771024', CAST(N'2022-03-24T00:00:00.000' AS DateTime), 50000000,
+        N'D01', N'waiting', NULL, NULL)
 GO
-INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity]) VALUES (N'nam', N'P00002', 5)
+INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity])
+VALUES (N'nam', N'P00002', 5)
 GO
-INSERT [dbo].[OrderDetails] ([OrderId], [ProductId], [Quantity], [Price], [TotalPrice]) VALUES (N'O00001', N'P00001', 2, 25000000, 50000000)
+INSERT [dbo].[OrderDetails] ([OrderId], [ProductId], [Quantity], [Price], [TotalPrice])
+VALUES (N'O00001', N'P00001', 2, 25000000, 50000000)
 GO
