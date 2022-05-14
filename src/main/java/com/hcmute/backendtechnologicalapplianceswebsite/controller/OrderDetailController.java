@@ -6,6 +6,7 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.OrderDetailRe
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.OrderRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/technological_appliances/")
@@ -36,12 +38,16 @@ public class OrderDetailController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
         Collection<Order> orders = new ArrayList<>();
         orderRepository.findAllByUser(user).forEach(orders::add);
+
+        log.info("Get all order details by username: " + username);
         return orderDetailRepository.findAllByOrderIn(orders);
     }
 
     @GetMapping("/order-details/{orderId}")
     public ResponseEntity<List<OrderDetail>> getAllOrderDetails(@PathVariable String orderId) {
         List<OrderDetail> orderDetails = orderDetailRepository.findAllById_OrderId(orderId);
+
+        log.info("Get all order details by orderId: " + orderId);
         return ResponseEntity.ok().body(orderDetails);
     }
 
@@ -54,6 +60,7 @@ public class OrderDetailController {
         orderDetail.setOrder(order);
         orderDetail.setProduct(product);
 
+        log.info("Create order detail: " + orderDetail);
         return orderDetailRepository.save(orderDetail);
     }
 
@@ -62,6 +69,8 @@ public class OrderDetailController {
         OrderDetailId orderDetailId = new OrderDetailId(orderId, productId);
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
                 .orElseThrow(() -> new ResourceNotFoundException("OrderDetail not found with id: " + orderDetailId));
+
+        log.info("Get order detail by id: " + orderDetailId);
         return ResponseEntity.ok(orderDetail);
     }
 
@@ -76,6 +85,8 @@ public class OrderDetailController {
         orderDetail.setTotalPrice(order.getTotalPrice());
 
         OrderDetail updatedOrderDetail = orderDetailRepository.save(orderDetail);
+
+        log.info("Update order detail: " + orderDetail);
         return ResponseEntity.ok(updatedOrderDetail);
     }
 
@@ -86,6 +97,8 @@ public class OrderDetailController {
         OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
                 .orElseThrow(() -> new ResourceNotFoundException("OrderDetail not found with id: " + orderDetailId));
         orderDetailRepository.delete(orderDetail);
+
+        log.info("Delete order detail: " + orderDetail);
         return ResponseEntity.ok().build();
     }
 

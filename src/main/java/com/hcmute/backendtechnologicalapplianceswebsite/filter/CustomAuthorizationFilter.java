@@ -32,6 +32,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         String apiPath = "/api/technological_appliances";
 
+        // Skip authentication for admin
+        if (isAdminInJWT(request)) {
+            return true;
+        }
+
         if (method.equals("GET")) {
             List<String> publicPaths = new ArrayList<>();
             publicPaths.add(apiPath + "/products");
@@ -56,7 +61,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             publicPaths.add(apiPath + "/register");
             publicPaths.add(apiPath + "/reset-password");
             publicPaths.add(apiPath + "/forgot-password/**");
-
 
             for (String path : publicPaths) {
                 if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
@@ -103,4 +107,24 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         return request.getRequestURI().equals("/login") && request.getMethod().equals("POST");
     }
 
+    private boolean isAdminInJWT(HttpServletRequest request) {
+        String token = request.getHeader(AUTHORIZATION);
+        if (token != null && token.startsWith("Bearer ")) {
+            try {
+                token = token.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET.getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT jwt = verifier.verify(token);
+                String[] roles = jwt.getClaim("roles").asArray(String.class);
+                for (String role : roles) {
+                    if (role.equals("ROLE_ADMIN")) {
+                        return true;
+                    }
+                }
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return false;
+    }
 }

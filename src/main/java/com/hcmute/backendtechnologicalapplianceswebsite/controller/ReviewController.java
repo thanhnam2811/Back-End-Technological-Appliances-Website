@@ -7,11 +7,13 @@ import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ReviewRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/technological_appliances/")
@@ -30,6 +32,7 @@ public class ReviewController {
     // Get All Reviews
     @GetMapping("/reviews")
     public Iterable<Review> getAllReviews() {
+        log.info("Get all reviews");
         return reviewRepository.findAll();
     }
 
@@ -38,6 +41,8 @@ public class ReviewController {
     public Iterable<Review> getAllReviewsByProductId(@PathVariable(value = "productId") String productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+
+        log.info("Get all reviews by product id: " + productId);
         return reviewRepository.findAllByProduct(product);
     }
 
@@ -62,6 +67,7 @@ public class ReviewController {
             review.setTime(new Date());
         }
 
+        log.info("Create review: " + review);
         return reviewRepository.save(review);
     }
 
@@ -70,6 +76,8 @@ public class ReviewController {
     public ResponseEntity<Review> getReviewById(@PathVariable String id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
+
+        log.info("Get review by id: " + id);
         return ResponseEntity.ok(review);
     }
 
@@ -88,6 +96,8 @@ public class ReviewController {
             _review.setTime(review.getTime());
 
         reviewRepository.save(_review);
+
+        log.info("Update review: " + _review);
         return ResponseEntity.ok(_review);
     }
 
@@ -97,6 +107,8 @@ public class ReviewController {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
         reviewRepository.delete(review);
+
+        log.info("Delete review: " + review);
         return ResponseEntity.ok(review);
     }
 }

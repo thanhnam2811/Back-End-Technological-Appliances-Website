@@ -7,9 +7,11 @@ import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.DeliveryRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.OrderRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/technological_appliances/")
@@ -27,6 +29,7 @@ public class OrderController {
 
     @GetMapping("/orders")
     public Iterable<Order> getAllOrders() {
+        log.info("Get all orders");
         return orderRepository.findAll();
     }
 
@@ -44,14 +47,17 @@ public class OrderController {
 
         // Id
         order.setOrderId(orderRepository.generateOrderId());
+
+        log.info("Create order: {}", order);
         return orderRepository.save(order);
     }
 
     @GetMapping("/orders/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable String id) {
-        Order order = orderRepository.findByOrderId(id);
-        if (order == null)
-            throw new ResourceNotFoundException("Order not found with id: " + id);
+        Order order = orderRepository.findById(id)
+                .orElseThrow((() -> new ResourceNotFoundException("Order not found with id: " + id)));
+
+        log.info("Get order by id: {}", id);
         return ResponseEntity.ok(order);
     }
 
@@ -59,6 +65,8 @@ public class OrderController {
     public Iterable<Order> getOrderByUsername(@PathVariable String username) {
         User user = userRepository.findById(username)
                 .orElseThrow((() -> new ResourceNotFoundException("User not found with username: " + username)));
+
+        log.info("Get order by username: {}", username);
         return orderRepository.findAllByUser(user);
     }
 
@@ -67,29 +75,20 @@ public class OrderController {
     public ResponseEntity<Order> updateOrder(@PathVariable String id, @RequestBody Order order) {
         Order _order = orderRepository.findById(id)
                 .orElseThrow((() -> new ResourceNotFoundException("Order not found with id: " + id)));
+        order.setOrderId(_order.getOrderId());
 
-        _order.setName(order.getName());
-        _order.setAddress(order.getAddress());
-        _order.setCouponId(order.getCouponId());
-        _order.setDelivery(order.getDelivery());
-        _order.setDiscountPrice(order.getDiscountPrice());
-        _order.setPurchaseDate(order.getPurchaseDate());
-        _order.setPhoneNumber(order.getPhoneNumber());
-        _order.setUser(order.getUser());
-        _order.setStatus(order.getStatus());
-        _order.setTotalPrices(order.getTotalPrices());
-
-        orderRepository.save(_order);
-        return ResponseEntity.ok(_order);
+        log.info("Update order: {}", order);
+        return ResponseEntity.ok(orderRepository.save(order));
     }
 
 
     @DeleteMapping("/orders/{id}")
     public ResponseEntity<Order> deleteCoupon(@PathVariable String id) {
-        Order order = orderRepository.findByOrderId(id);
-        if (order == null)
-            throw new ResourceNotFoundException("Order not found with id: " + id);
+        Order order = orderRepository.findById(id)
+                .orElseThrow((() -> new ResourceNotFoundException("Order not found with id: " + id)));
         orderRepository.delete(order);
+
+        log.info("Delete order: {}", order);
         return ResponseEntity.ok(order);
     }
 }

@@ -11,13 +11,14 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepositor
 import com.hcmute.backendtechnologicalapplianceswebsite.service.EmailService;
 import com.hcmute.backendtechnologicalapplianceswebsite.service.ISecurityUserServiceImpl;
 import com.hcmute.backendtechnologicalapplianceswebsite.utils.MyUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/technological_appliances/")
@@ -60,6 +61,8 @@ public class AccountController {
             model.put("WEBSITE_NAME", "Web Tech Appliances");
             mail.setModel(model);
             emailService.sendEmail(mail);
+
+            log.info("Send email to " + user.getEmail());
             return "Email has been sent";
         }
     }
@@ -76,6 +79,8 @@ public class AccountController {
             String hashPassword = passwordEncoder.encode(password);
             account.setPassword(hashPassword);
             accountRepository.save(account);
+
+            log.info("Reset password for " + account.getUsername());
             return "Password has been reset";
         }
     }
