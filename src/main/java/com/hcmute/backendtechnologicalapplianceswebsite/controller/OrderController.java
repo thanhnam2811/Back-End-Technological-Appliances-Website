@@ -33,10 +33,10 @@ public class OrderController {
         return orderRepository.findAll();
     }
 
-    @PostMapping("/orders")
-    public Order createOrder(@RequestBody Order order) {
+    @PostMapping("/orders/{username}")
+    public Order createOrder(@RequestBody Order order, @PathVariable String username) {
         // User
-        User user = userRepository.findById(order.getUser().getUsername())
+        User user = userRepository.findById(username)
                 .orElseThrow((() -> new ResourceNotFoundException("User not found with username: " + order.getUser().getUsername())));
         order.setUser(user);
 
@@ -71,14 +71,22 @@ public class OrderController {
     }
 
     //    Update brand
-    @PutMapping("/orders/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable String id, @RequestBody Order order) {
+    @PutMapping("/orders/{username}/{id}")
+    public ResponseEntity<Order> updateOrder(@PathVariable String id, @RequestBody Order order, @PathVariable String username) {
         Order _order = orderRepository.findById(id)
                 .orElseThrow((() -> new ResourceNotFoundException("Order not found with id: " + id)));
         order.setOrderId(_order.getOrderId());
 
-        log.info("Update order: {}", order);
-        return ResponseEntity.ok(orderRepository.save(order));
+        if (order.getUser().getUsername().equals(username)) {
+            User user = userRepository.findById(username)
+                    .orElseThrow((() -> new ResourceNotFoundException("User not found with username: " + username)));
+            order.setUser(user);
+
+            log.info("Update order: {}", order);
+            return ResponseEntity.ok(orderRepository.save(order));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 

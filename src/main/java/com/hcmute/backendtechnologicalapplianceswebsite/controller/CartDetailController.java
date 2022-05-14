@@ -42,14 +42,11 @@ public class CartDetailController {
         }
     }
 
-    @PostMapping("/cart-details")
-    public CartDetail createCartDetail(@RequestBody CartDetail cartDetail) {
-        User user = userRepository.findById(cartDetail.getId().getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + cartDetail.getId().getUsername()));
-        Product product = productRepository.findById(cartDetail.getId().getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + cartDetail.getId().getProductId()));
+    @PostMapping("/cart-details/{username}/{productId}")
+    public CartDetail createCartDetail(@RequestBody CartDetail cartDetail, @PathVariable String username, @PathVariable String productId) {
+        CartDetailId cartDetailId = new CartDetailId(username, productId);
 
-        if (cartDetailRepository.existsById(cartDetail.getId())) {
+        if (cartDetailRepository.existsById(cartDetailId)) {
             CartDetail newCartDetail = cartDetailRepository.findById(cartDetail.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("CartDetail not found with id: " + cartDetail.getId()));
             newCartDetail.setQuantity(newCartDetail.getQuantity() + cartDetail.getQuantity());
@@ -57,6 +54,10 @@ public class CartDetailController {
             log.info("CartDetail is existed, update quantity of cart detail: {}", cartDetail.getId());
             return cartDetailRepository.save(newCartDetail);
         } else {
+            User user = userRepository.findById(username)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + cartDetail.getId().getUsername()));
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + cartDetail.getId().getProductId()));
             cartDetail.setUser(user);
             cartDetail.setProduct(product);
 

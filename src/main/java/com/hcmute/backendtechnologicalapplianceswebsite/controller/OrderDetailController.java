@@ -51,17 +51,22 @@ public class OrderDetailController {
         return ResponseEntity.ok().body(orderDetails);
     }
 
-    @PostMapping("/order-details")
-    public OrderDetail createOrderDetail(@RequestBody OrderDetail orderDetail) {
+    @PostMapping("/order-details/{username}")
+    public ResponseEntity<OrderDetail> createOrderDetail(@RequestBody OrderDetail orderDetail, @PathVariable String username) {
         Order order = orderRepository.findById(orderDetail.getId().getOrderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderDetail.getId().getOrderId()));
-        Product product = productRepository.findById(orderDetail.getId().getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + orderDetail.getId().getProductId()));
-        orderDetail.setOrder(order);
-        orderDetail.setProduct(product);
+        if (order.getUser().getUsername().equals(username)) {
+            Product product = productRepository.findById(orderDetail.getId().getProductId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + orderDetail.getId().getProductId()));
+            orderDetail.setOrder(order);
+            orderDetail.setProduct(product);
 
-        log.info("Create order detail: " + orderDetail);
-        return orderDetailRepository.save(orderDetail);
+            log.info("Create order detail: " + orderDetail);
+            return ResponseEntity.ok().body(orderDetailRepository.save(orderDetail));
+        } else {
+            log.error("Create order detail failed: Don't have permission");
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/order-details/{orderId}/{productId}")
@@ -75,19 +80,27 @@ public class OrderDetailController {
     }
 
     // Update orderDetail
-    @PutMapping("/order-details/{orderId}/{productId}")
-    public ResponseEntity<OrderDetail> updateOrderDetail(@PathVariable String orderId, @PathVariable String productId, @RequestBody OrderDetail order) {
-        OrderDetailId orderDetailId = new OrderDetailId(orderId, productId);
-        OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("OrderDetail not found with id: " + orderDetailId));
-        orderDetail.setQuantity(order.getQuantity());
-        orderDetail.setPrice(order.getPrice());
-        orderDetail.setTotalPrice(order.getTotalPrice());
+    @PutMapping("/order-details/{username}/{orderId}/{productId}")
+    public ResponseEntity<OrderDetail> updateOrderDetail(@PathVariable String orderId, @PathVariable String productId, @RequestBody OrderDetail detail, @PathVariable String username) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+        if (order.getUser().getUsername().equals(username)) {
 
-        OrderDetail updatedOrderDetail = orderDetailRepository.save(orderDetail);
+            OrderDetailId orderDetailId = new OrderDetailId(orderId, productId);
+            OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId)
+                    .orElseThrow(() -> new ResourceNotFoundException("OrderDetail not found with id: " + orderDetailId));
+            orderDetail.setQuantity(detail.getQuantity());
+            orderDetail.setPrice(detail.getPrice());
+            orderDetail.setTotalPrice(detail.getTotalPrice());
 
-        log.info("Update order detail: " + orderDetail);
-        return ResponseEntity.ok(updatedOrderDetail);
+            OrderDetail updatedOrderDetail = orderDetailRepository.save(orderDetail);
+
+            log.info("Update order detail: " + orderDetail);
+            return ResponseEntity.ok(updatedOrderDetail);
+        } else {
+            log.error("Update order detail failed: Don't have permission");
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 

@@ -47,7 +47,7 @@ public class ReviewController {
     }
 
     //    Create review
-    @PostMapping("/reviews/product/{productId}/user/{username}")
+    @PostMapping("/reviews/{username}/{productId}")
     public Review createReview(@RequestBody Review review, @PathVariable(value = "productId") String productId, @PathVariable(value = "username") String username) {
         //  Default value for reviewId
         review.setReviewId(reviewRepository.generateReviewId());
@@ -82,33 +82,42 @@ public class ReviewController {
     }
 
     //    Update review
-    @PutMapping("/reviews/{id}")
-    public ResponseEntity<Review> updateReview(@PathVariable String id, @RequestBody Review review) {
+    @PutMapping("/reviews/{username}/{id}")
+    public ResponseEntity<Review> updateReview(@PathVariable String username, @PathVariable String id, @RequestBody Review review) {
         Review _review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
-        _review.setContent(review.getContent());
-        _review.setRate(review.getRate());
+        if (_review.getUsername().equals(username)) {
+            _review.setContent(review.getContent());
+            _review.setRate(review.getRate());
 
-        // Time
-        if (review.getTime() == null)
-            _review.setTime(new Date());
-        else
-            _review.setTime(review.getTime());
+            // Time
+            if (review.getTime() == null)
+                _review.setTime(new Date());
+            else
+                _review.setTime(review.getTime());
 
-        reviewRepository.save(_review);
+            reviewRepository.save(_review);
 
-        log.info("Update review: " + _review);
-        return ResponseEntity.ok(_review);
+            log.info("Update review: " + _review);
+            return ResponseEntity.ok(_review);
+        } else {
+            log.error("Update review: " + id + " failed" + " because user: " + username + " is not owner of review");
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     //    Delete review
-    @DeleteMapping("/reviews/{id}")
-    public ResponseEntity<Review> deleteReview(@PathVariable String id) {
+    @DeleteMapping("/reviews/{username}/{id}")
+    public ResponseEntity<Review> deleteReview(@PathVariable String id, @PathVariable String username) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + id));
-        reviewRepository.delete(review);
-
-        log.info("Delete review: " + review);
-        return ResponseEntity.ok(review);
+        if (review.getUsername().equals(username)) {
+            log.info("Delete review: " + review);
+            reviewRepository.delete(review);
+            return ResponseEntity.ok().build();
+        } else {
+            log.error("Delete review: " + id + " failed" + " because user: " + username + " is not owner of review");
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
