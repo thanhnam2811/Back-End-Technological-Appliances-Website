@@ -72,45 +72,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String servletPath = request.getServletPath();
-        String method = request.getMethod();
-        String apiPath = "/api/technological_appliances";
-
-        if (method.equals("GET")) {
-            List<String> publicPaths = new ArrayList<>();
-            publicPaths.add(apiPath + "/products");
-            publicPaths.add(apiPath + "/products/**");
-            publicPaths.add(apiPath + "/brands");
-            publicPaths.add(apiPath + "/brands/**");
-            publicPaths.add(apiPath + "/reviews");
-            publicPaths.add(apiPath + "/reviews/**");
-            publicPaths.add(apiPath + "/categories");
-            publicPaths.add(apiPath + "/categories/**");
-
-            for (String path : publicPaths) {
-                if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
-                    return true;
-                } else if (servletPath.equals(path)) {
-                    return true;
-                }
-            }
-        } else if (method.equals("POST")) {
-            List<String> publicPaths = new ArrayList<>();
-            publicPaths.add(apiPath + "/login");
-            publicPaths.add(apiPath + "/register");
-
-            for (String path : publicPaths) {
-                if (servletPath.equals(path)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (isLoginRequest(request)) {
             filterChain.doFilter(request, response);
