@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "Coupons")
@@ -18,10 +19,10 @@ public class Coupon implements Serializable {
     private Double discount;
 
     @Column(name = "ExpiredTime")
-    private Instant expiredTime;
+    private Date expiredTime;
 
     @Column(name = "EffectiveTime")
-    private Instant effectiveTime;
+    private Date effectiveTime;
 
     @Column(name = "Description", length = 300)
     private String description;
@@ -34,19 +35,19 @@ public class Coupon implements Serializable {
         this.description = description;
     }
 
-    public Instant getEffectiveTime() {
+    public Date getEffectiveTime() {
         return effectiveTime;
     }
 
-    public void setEffectiveTime(Instant effectiveTime) {
+    public void setEffectiveTime(Date effectiveTime) {
         this.effectiveTime = effectiveTime;
     }
 
-    public Instant getExpiredTime() {
+    public Date getExpiredTime() {
         return expiredTime;
     }
 
-    public void setExpiredTime(Instant expiredTime) {
+    public void setExpiredTime(Date expiredTime) {
         this.expiredTime = expiredTime;
     }
 
