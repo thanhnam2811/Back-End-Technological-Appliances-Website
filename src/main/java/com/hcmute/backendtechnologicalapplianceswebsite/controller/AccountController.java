@@ -124,6 +124,8 @@ public class AccountController {
         account.setUser(newUser);
         account.setRole(Account.ROLE_USER);
         accountRepository.save(account);
+
+        log.info("Register new user " + newUser.getUsername());
         return ResponseEntity.ok(newUser);
     }
 
