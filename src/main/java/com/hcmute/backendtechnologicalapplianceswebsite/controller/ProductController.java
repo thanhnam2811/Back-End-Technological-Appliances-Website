@@ -1,5 +1,6 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
+
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
@@ -13,8 +14,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.Chart;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TopCustomer;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TopProduct;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TotalSales;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.ChartRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TopCustomerRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TopProductRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TotalSalesRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.upload.FileUploadUtil;
 
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,11 +37,19 @@ public class ProductController {
     private final ProductRepository productRepository;
     private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
+    private final ChartRepository chartRepository;
+    private final TopProductRepository topProductRepository;
+    private final TopCustomerRepository topCustomerRepository;
+    private final TotalSalesRepository totalSalesRepository;
 
-    public ProductController(ProductRepository productRepository, BrandRepository brandRepository, CategoryRepository categoryRepository) {
+    public ProductController(ProductRepository productRepository, BrandRepository brandRepository, CategoryRepository categoryRepository,ChartRepository chartRepository,TopProductRepository topProductRepository,TopCustomerRepository topCustomerRepository,TotalSalesRepository totalSalesRepository) {
         this.productRepository = productRepository;
         this.brandRepository = brandRepository;
         this.categoryRepository = categoryRepository;
+        this.chartRepository=chartRepository;
+        this.topProductRepository=topProductRepository;
+        this.topCustomerRepository=topCustomerRepository;
+        this.totalSalesRepository=totalSalesRepository;
     }
 
     // Get All Products
@@ -194,4 +214,52 @@ public class ProductController {
         log.info("Delete product: " + product);
         return ResponseEntity.ok(product);
     }
+    @GetMapping("/chartdata")
+    public Iterable<Chart>MonthToTal(){
+        return chartRepository.getTotalByMonth();
+    }
+    @GetMapping("/topproduct")
+    public Iterable<TopProduct>TopProducts(){return topProductRepository.getTopProduct();}
+    @GetMapping("/topcustomer")
+    public Iterable<TopCustomer>TopCustomer(){return topCustomerRepository.getTopCustomer();}
+    @GetMapping("/totallaptop")
+    public Iterable<TotalSales>TotalLaptop(){
+        try{
+            return totalSalesRepository.totalLaptop();
+        }catch (Exception e)
+        {
+            TotalSales a=new TotalSales(1,0);
+            List<TotalSales>c=new ArrayList<>();
+            c.add(a);
+            Iterable<TotalSales>b=c;
+            return b;
+        }
+    }
+    @GetMapping("/totalmobile")
+    public Iterable<TotalSales>TotalMobile(){
+        try{
+            return totalSalesRepository.totalMobile();
+        }catch (Exception e)
+        {
+            TotalSales a=new TotalSales(2,0);
+            List<TotalSales>c=new ArrayList<>();
+            c.add(a);
+            Iterable<TotalSales>b=c;
+            return b;
+        }
+    }
+    @GetMapping("/totalall")
+    public Iterable<TotalSales>TotalAll(){
+        try{
+        return totalSalesRepository.totalAll();
+    }
+        catch (Exception e)
+    {
+        TotalSales a=new TotalSales(3,0);
+        List<TotalSales>c=new ArrayList<>();
+        c.add(a);
+        Iterable<TotalSales>b=c;
+        return b;
+    }}
+
 }
