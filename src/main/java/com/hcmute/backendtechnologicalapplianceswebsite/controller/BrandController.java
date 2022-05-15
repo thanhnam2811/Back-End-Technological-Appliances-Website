@@ -1,11 +1,12 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.BrandRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
@@ -39,7 +40,7 @@ public class BrandController {
     @GetMapping("/brands/{id}")
     public ResponseEntity<Brand> getBrandById(@PathVariable String id) {
         Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + id));
 
         log.info("Get brand by id: " + id);
         return ResponseEntity.ok(brand);
@@ -49,7 +50,7 @@ public class BrandController {
     @PutMapping("/brands/{id}")
     public ResponseEntity<Brand> updateBrand(@PathVariable String id, @RequestBody Brand brand) {
         Brand _brand = brandRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + id));
         _brand.setName(brand.getName());
         _brand.setEmail(brand.getEmail());
         _brand.setLocation(brand.getLocation());
@@ -64,7 +65,7 @@ public class BrandController {
     @DeleteMapping("/brands/{id}")
     public ResponseEntity<Brand> deleteBrand(@PathVariable String id) {
         Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + id));
         brandRepository.delete(brand);
 
         log.info("Delete brand: " + brand);

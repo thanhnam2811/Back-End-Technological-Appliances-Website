@@ -1,7 +1,5 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
-import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.upload.FileUploadUtil;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
@@ -10,14 +8,14 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.CategoryRepos
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
@@ -52,7 +50,7 @@ public class ProductController {
     public Iterable<Product> getAllProductsByBrand(@PathVariable String brandId) {
         log.info("Get all product by brand: " + brandId);
         Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + brandId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + brandId));
         return productRepository.findAllByBrand(brand);
     }
 
@@ -70,11 +68,11 @@ public class ProductController {
         }
 
         Brand brand = brandRepository.findById(product.getBrand().getBrandId())
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + product.getBrand().getBrandId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + product.getBrand().getBrandId()));
         product.setBrand(brand);
 
         Category category = categoryRepository.findById(product.getCategory().getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + product.getCategory().getCategoryId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found with id: " + product.getCategory().getCategoryId()));
 
         product.setCategory(category);
 
@@ -144,7 +142,7 @@ public class ProductController {
     public ResponseEntity<Product> getProductById(@PathVariable String id) {
         Product product = productRepository.findByProductId(id);
         if (product == null)
-            throw new ResourceNotFoundException("Product not found with id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id);
 
         log.info("Get product by id: " + id);
         return ResponseEntity.ok(product);
@@ -155,7 +153,7 @@ public class ProductController {
     public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product, @RequestParam(value = "files", required = false) MultipartFile[] files) {
         // Check if product exist
         Product _product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
         product.setProductId(_product.getProductId());
 
         // Update image if not null
@@ -170,11 +168,11 @@ public class ProductController {
 
         // Update brand and category
         Brand brand = brandRepository.findById(product.getBrand().getBrandId())
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + product.getBrand().getBrandId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + product.getBrand().getBrandId()));
         product.setBrand(brand);
 
         Category category = categoryRepository.findById(product.getCategory().getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + product.getCategory().getCategoryId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found with id: " + product.getCategory().getCategoryId()));
         product.setCategory(category);
 
         // Update sale date if null
@@ -189,9 +187,8 @@ public class ProductController {
     //    Delete product
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable String id) {
-        Product product = productRepository.findByProductId(id);
-        if (product == null)
-            throw new ResourceNotFoundException("Product not found with id: " + id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
         productRepository.delete(product);
 
         log.info("Delete product: " + product);

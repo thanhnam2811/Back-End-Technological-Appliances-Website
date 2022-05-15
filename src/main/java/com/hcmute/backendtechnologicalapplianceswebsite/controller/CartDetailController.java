@@ -1,6 +1,5 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.CartDetail;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.CartDetailId;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
@@ -9,8 +8,10 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.CartDetailRep
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class CartDetailController {
 
         log.info("Get all cart details of user: {}", username);
         if (cartDetails.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart details not found");
         } else {
             return ResponseEntity.ok(cartDetails);
         }
@@ -48,16 +49,16 @@ public class CartDetailController {
 
         if (cartDetailRepository.existsById(cartDetailId)) {
             CartDetail newCartDetail = cartDetailRepository.findById(cartDetail.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("CartDetail not found with id: " + cartDetail.getId()));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CartDetail not found with id: " + cartDetail.getId()));
             newCartDetail.setQuantity(newCartDetail.getQuantity() + cartDetail.getQuantity());
 
             log.info("CartDetail is existed, update quantity of cart detail: {}", cartDetail.getId());
             return cartDetailRepository.save(newCartDetail);
         } else {
             User user = userRepository.findById(username)
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + cartDetail.getId().getUsername()));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + cartDetail.getId().getUsername()));
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + cartDetail.getId().getProductId()));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + cartDetail.getId().getProductId()));
             cartDetail.setUser(user);
             cartDetail.setProduct(product);
 
@@ -70,7 +71,7 @@ public class CartDetailController {
     public ResponseEntity<CartDetail> getCartDetail(@PathVariable String username, @PathVariable String productId) {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartDetailId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found with id: " + cartDetailId));
 
         log.info("Get cart detail: {}", cartDetailId);
         return ResponseEntity.ok(cartDetail);
@@ -80,7 +81,7 @@ public class CartDetailController {
     public CartDetail updateCartDetail(@RequestBody CartDetail data, @PathVariable String username, @PathVariable String productId) {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartDetailId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found with id: " + cartDetailId));
         cartDetail.setQuantity(data.getQuantity());
 
         log.info("Update cart detail: {}", cartDetailId);
@@ -92,7 +93,7 @@ public class CartDetailController {
     public ResponseEntity<CartDetail> deleteCartDetail(@PathVariable String username, @PathVariable String productId) {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + cartDetailId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found with id: " + cartDetailId));
         cartDetailRepository.delete(cartDetail);
 
         log.info("Delete cart detail: {}", cartDetailId);

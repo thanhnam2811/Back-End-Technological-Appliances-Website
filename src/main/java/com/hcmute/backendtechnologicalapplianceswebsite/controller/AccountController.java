@@ -1,6 +1,5 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Account;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Mail;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.PasswordResetToken;
@@ -45,9 +44,9 @@ public class AccountController {
     @PostMapping("/forgot-password/{username}")
     public String forgotPassword(@PathVariable String username, @RequestParam String email) {
         User user = userRepository.findById(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with username: " + username));
         if (!user.getEmail().equals(email)) {
-            throw new ResourceNotFoundException("Email is not correct");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is not correct");
         } else {
             String token = MyUtils.generateToken();
             securityUserService.createPasswordResetTokenForUser(user, token);
@@ -58,7 +57,7 @@ public class AccountController {
 
             Map<String, Object> model = new HashMap<>();
             model.put("user", user);
-            String resetUrl = "http://localhost:3000/reset-password?token=" + token;
+            String resetUrl = "http://localhost:3000/reset?token=" + token;
             model.put("resetUrl", resetUrl);
             model.put("signature", "From WebTechAppliances");
             model.put("WEBSITE_NAME", "Web Tech Appliances");
@@ -74,11 +73,11 @@ public class AccountController {
     public String resetPassword(@RequestParam String token, @RequestParam String password) {
         String result = securityUserService.validatePasswordResetToken(token);
         if (result != null) {
-            throw new ResourceNotFoundException("Token is not valid");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token is not valid");
         } else {
             PasswordResetToken passToken = passwordTokenRepository.findByToken(token);
             Account account = accountRepository.findById(passToken.getUser().getUsername())
-                    .orElseThrow(() -> new ResourceNotFoundException("Account not found with username: " + passToken.getUser().getUsername()));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found with username: " + passToken.getUser().getUsername()));
             String hashPassword = passwordEncoder.encode(password);
             account.setPassword(hashPassword);
             accountRepository.save(account);
@@ -91,9 +90,9 @@ public class AccountController {
     @PostMapping("/change-password/{username}")
     public String changePassword(@PathVariable String username, @RequestParam String oldPassword, @RequestParam String newPassword) {
         Account account = accountRepository.findById(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Account not found with username: " + username));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found with username: " + username));
         if (!passwordEncoder.matches(oldPassword, account.getPassword())) {
-            throw new ResourceNotFoundException("Old password is not correct");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Old password is not correct");
         } else {
             String hashPassword = passwordEncoder.encode(newPassword);
             account.setPassword(hashPassword);
@@ -110,13 +109,13 @@ public class AccountController {
             user.setUsername(username);
         }
         if (userRepository.existsById(user.getUsername())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is existed");
+            throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT, "Username is existed");
         }
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is existed");
+            throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT, "Email is existed");
         }
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number is existed");
+            throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT, "Phone number is existed");
         }
         User newUser = userRepository.save(user);
         Account account = new Account();

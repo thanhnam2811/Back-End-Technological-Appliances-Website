@@ -1,13 +1,12 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Coupon;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.BrandRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.CouponRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
@@ -35,7 +34,7 @@ public class CouponController {
     @GetMapping("/coupons/{id}")
     public ResponseEntity<Coupon> getCouponById(@PathVariable String id) {
         Coupon coupon = couponRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Coupon not found with id " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coupon not found with id " + id));
 
         log.info("Get coupon by id: " + id);
         return ResponseEntity.ok(coupon);
@@ -45,7 +44,7 @@ public class CouponController {
     @PutMapping("/coupons/{id}")
     public ResponseEntity<Coupon> updateCoupon(@PathVariable String id, @RequestBody Coupon coupon) {
         Coupon _coupon = couponRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Coupon not found with id " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coupon not found with id " + id));
         coupon.setCouponId(_coupon.getCouponId());
 
         log.info("Update coupon: " + coupon);
@@ -56,7 +55,7 @@ public class CouponController {
     @DeleteMapping("/coupons/{id}")
     public ResponseEntity<Coupon> deleteCoupon(@PathVariable String id) {
         Coupon coupon = couponRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Coupon not found with id " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Coupon not found with id " + id));
         couponRepository.delete(coupon);
 
         log.info("Delete coupon: " + coupon);
