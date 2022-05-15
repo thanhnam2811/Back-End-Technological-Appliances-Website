@@ -132,4 +132,20 @@ public class AccountController {
         return ResponseEntity.ok(newUser);
     }
 
+    @PutMapping("/change-role/{username}")
+    public ResponseEntity<User> changeRole(@PathVariable String username) {
+        Account account = accountRepository.findById(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found with username: " + username));
+
+        if (account.getRole().equals(Account.ROLE_USER)) {
+            account.setRole(Account.ROLE_ADMIN);
+        } else {
+            account.setRole(Account.ROLE_USER);
+        }
+
+        accountRepository.save(account);
+        log.info("Change role for " + account.getUsername() + " to " + Account.getRoleName(account.getRole()));
+        return ResponseEntity.ok(account.getUser());
+    }
+
 }
