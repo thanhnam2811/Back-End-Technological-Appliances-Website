@@ -4,9 +4,17 @@ package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.Chart;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TopCustomer;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TopProduct;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TotalSales;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.BrandRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.CategoryRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.ChartRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TopCustomerRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TopProductRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TotalSalesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -14,16 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.Chart;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TopCustomer;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TopProduct;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TotalSales;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.ChartRepository;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TopCustomerRepository;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TopProductRepository;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TotalSalesRepository;
-import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.upload.FileUploadUtil;
+
+
 
 import java.util.Date;
 import java.util.ArrayList;
