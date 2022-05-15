@@ -105,6 +105,9 @@ public class AccountController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestHeader String username, @RequestHeader String password, @RequestBody User user) {
+        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username or password is required to register");
+        }
         if (!username.equals(user.getUsername())) {
             user.setUsername(username);
         }
