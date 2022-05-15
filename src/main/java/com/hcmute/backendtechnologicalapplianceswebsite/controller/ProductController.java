@@ -55,8 +55,8 @@ public class ProductController {
     }
 
     //    Create product
-    @PostMapping(value = "/products", consumes = {"multipart/form-data"})
-    public Product createProduct(Product product, @RequestParam(value = "files", required = false) MultipartFile[] uploadedFiles) {
+    @PostMapping(value = "/products")
+    public Product createProduct(@RequestBody Product product, @RequestParam(value = "files", required = false) MultipartFile[] uploadedFiles) {
         //  Default value for productId
         product.setProductId(productRepository.generateProductId());
 

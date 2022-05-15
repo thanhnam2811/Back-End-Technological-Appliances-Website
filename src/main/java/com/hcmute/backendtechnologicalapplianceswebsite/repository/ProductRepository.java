@@ -14,12 +14,12 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     default String generateProductId() {
         String PREFIX = "P";
         int index = PREFIX.length();
-        int length = 2;
+        int length = 5;
 
         List<Product> products = findAll();
 
         if (products.size() == 0) {
-            return PREFIX + "01"; // first product
+            return PREFIX + "00001"; // first product
         }
 
         products.sort((c1, c2) -> {
