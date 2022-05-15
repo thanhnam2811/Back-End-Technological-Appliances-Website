@@ -12,8 +12,11 @@ import com.hcmute.backendtechnologicalapplianceswebsite.service.EmailService;
 import com.hcmute.backendtechnologicalapplianceswebsite.service.ISecurityUserServiceImpl;
 import com.hcmute.backendtechnologicalapplianceswebsite.utils.MyUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,4 +87,45 @@ public class AccountController {
             return "Password has been reset";
         }
     }
+
+    @PostMapping("/change-password/{username}")
+    public String changePassword(@PathVariable String username, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        Account account = accountRepository.findById(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with username: " + username));
+        if (!passwordEncoder.matches(oldPassword, account.getPassword())) {
+            throw new ResourceNotFoundException("Old password is not correct");
+        } else {
+            String hashPassword = passwordEncoder.encode(newPassword);
+            account.setPassword(hashPassword);
+            accountRepository.save(account);
+
+            log.info("Change password for " + account.getUsername());
+            return "Password has been changed";
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestHeader String username, @RequestHeader String password, @RequestBody User user) {
+        if (!username.equals(user.getUsername())) {
+            user.setUsername(username);
+        }
+        if (userRepository.existsById(user.getUsername())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is existed");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is existed");
+        }
+        if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Phone number is existed");
+        }
+        User newUser = userRepository.save(user);
+        Account account = new Account();
+        account.setUsername(newUser.getUsername());
+        account.setPassword(passwordEncoder.encode(password));
+        account.setUser(newUser);
+        account.setRole(Account.ROLE_USER);
+        accountRepository.save(account);
+        return ResponseEntity.ok(newUser);
+    }
+
 }
