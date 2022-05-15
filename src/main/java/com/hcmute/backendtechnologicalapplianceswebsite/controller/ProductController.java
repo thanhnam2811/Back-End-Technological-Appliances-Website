@@ -1,5 +1,19 @@
 package com.hcmute.backendtechnologicalapplianceswebsite.controller;
 
+
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.BrandRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.CategoryRepository;
+import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import com.hcmute.backendtechnologicalapplianceswebsite.exception.ResourceNotFoundException;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.Chart;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.dashboad.TopCustomer;
@@ -10,22 +24,12 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.Top
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TopProductRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.dashboard.TotalSalesRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.utils.fileUtils.upload.FileUploadUtil;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.Category;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.BrandRepository;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.CategoryRepository;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.ProductRepository;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/technological_appliances/")
@@ -55,70 +59,76 @@ public class ProductController {
     }
 
     private String GetFileNameImg(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        String fileDownloadUri = "http://localhost:8080/downloadFile/" + fileName;
-        long size = file.getSize();
-
-        FileUploadUtil.saveFile(fileName, file);
-
-        return fileName;
+        if (file != null && !file.isEmpty()) {
+            return file.getOriginalFilename();
+        }
+        return null;
     }
 
     // Get all product by brand
     @GetMapping(value = "/products/brand/{brandId}")
     public Iterable<Product> getAllProductsByBrand(@PathVariable String brandId) {
+        log.info("Get all product by brand: " + brandId);
         Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + brandId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + brandId));
         return productRepository.findAllByBrand(brand);
     }
 
     //    Create product
     @PostMapping(value = "/products", consumes = {"multipart/form-data"})
     public Product createProduct(Product product, @RequestParam(value = "files", required = false) MultipartFile[] uploadedFiles) {
-        StringBuilder ImgName = new StringBuilder();
-        for (var file : uploadedFiles) {
-            String tempName = GetFileNameImg(file);
-            ImgName.append(tempName).append("//");
-        }
         //  Default value for productId
         product.setProductId(productRepository.generateProductId());
 
-        product.setImage(ImgName.toString());
+        if (uploadedFiles != null && uploadedFiles.length > 0) {
+            for (MultipartFile file : uploadedFiles) {
+                String fileName = GetFileNameImg(file);
+                product.setImage(fileName);
+            }
+        }
 
-        Brand brand = brandRepository.findByBrandId("product.getBrand().getBrandId()");
-        if (brand == null)
-            throw new ResourceNotFoundException("Brand not found with id: " + product.getBrand().getBrandId());
+        Brand brand = brandRepository.findById(product.getBrand().getBrandId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + product.getBrand().getBrandId()));
         product.setBrand(brand);
 
-        Category category = categoryRepository.findByCategoryId(product.getCategory().getCategoryId());
-        if (category == null)
-            throw new ResourceNotFoundException("Category not found with id: " + product.getCategory().getCategoryId());
+        Category category = categoryRepository.findById(product.getCategory().getCategoryId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found with id: " + product.getCategory().getCategoryId()));
+
         product.setCategory(category);
 
         if (product.getSaleDate() == null) {
-            product.setSaleDate(null);
+            product.setSaleDate(new Date());
         }
 
+        log.info("Create product: " + product);
         return productRepository.save(product);
     }
 
     // Get top products newest
     @GetMapping(value = "/products/newest/{quantity}")
     public List<Product> getTopProductsNewest(@PathVariable Integer quantity) {
+        log.info("Get top " + quantity + " products newest");
         return productRepository.findAll(Sort.by("saleDate", "ProductId").descending()).subList(0, quantity);
     }
+
     @GetMapping(value = "/products/topseller")
     public Iterable<Product> getTopSeller() {
+        log.info("Get top seller");
         return productRepository.gettopseller();
     }
+
     @GetMapping(value = "/products/topfeature")
     public Iterable<Product> getTopFeature() {
+        log.info("Get top feature");
         return productRepository.gettopfeature();
     }
+
     @GetMapping(value = "/products/hottrend")
     public Iterable<Product> getHotTrend() {
+        log.info("Get hot trend");
         return productRepository.gethottrend();
     }
+
     // Get min price
     @GetMapping(value = "/products/price/min")
     public Double getMinPrice() {
@@ -128,6 +138,8 @@ public class ProductController {
             if (product.getPrice() < minPrice)
                 minPrice = product.getPrice();
         }
+
+        log.info("Get min price: " + minPrice);
         return minPrice;
     }
 
@@ -140,6 +152,8 @@ public class ProductController {
             if (product.getPrice() > maxPrice)
                 maxPrice = product.getPrice();
         }
+
+        log.info("Get max price: " + maxPrice);
         return maxPrice;
     }
 
@@ -148,53 +162,56 @@ public class ProductController {
     public ResponseEntity<Product> getProductById(@PathVariable String id) {
         Product product = productRepository.findByProductId(id);
         if (product == null)
-            throw new ResourceNotFoundException("Product not found with id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id);
+
+        log.info("Get product by id: " + id);
         return ResponseEntity.ok(product);
     }
 
     //    Update product
     @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, Product product, @RequestParam("files") MultipartFile[] files) {
-        Product _product = productRepository.findByProductId(id);
-        if (_product == null)
-            throw new ResourceNotFoundException("Product not found with id: " + id);
-        if (files == null) {
-            _product.setImage(product.getImage());
-        } else {
-            StringBuilder ImgName = new StringBuilder();
-            for (var file : files) {
-                String tempName = GetFileNameImg(file);
-                ImgName.append(tempName).append("//");
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product, @RequestParam(value = "files", required = false) MultipartFile[] files) {
+        // Check if product exist
+        Product _product = productRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
+        product.setProductId(_product.getProductId());
+
+        // Update image if not null
+        if (files != null && files.length > 0) {
+            for (MultipartFile file : files) {
+                String fileName = GetFileNameImg(file);
+                product.setImage(fileName);
             }
-            _product.setImage(ImgName.toString());
+        } else {
+            log.info("No file in request, use old file");
         }
-        _product.setName(product.getName());
-        _product.setPrice(product.getPrice());
-        _product.setDescription(product.getDescription());
-        _product.setCategory(product.getCategory());
-        _product.setQuantity(product.getQuantity());
-        _product.setBackCam(product.getBackCam());
-        _product.setFrontCam(product.getFrontCam());
-        _product.setRam(product.getRam());
-        _product.setRom(product.getRom());
-        _product.setWeight(product.getWeight());
-        _product.setScreen(product.getScreen());
-        _product.setOs(product.getOs());
-        _product.setBattery(product.getBattery());
-        _product.setCpu(product.getCpu());
-        _product.setSaleDate(product.getSaleDate());
-        _product.setVga(product.getVga());
-        productRepository.save(_product);
-        return ResponseEntity.ok(_product);
+
+        // Update brand and category
+        Brand brand = brandRepository.findById(product.getBrand().getBrandId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + product.getBrand().getBrandId()));
+        product.setBrand(brand);
+
+        Category category = categoryRepository.findById(product.getCategory().getCategoryId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found with id: " + product.getCategory().getCategoryId()));
+        product.setCategory(category);
+
+        // Update sale date if null
+        if (product.getSaleDate() == null) {
+            product.setSaleDate(new Date());
+        }
+
+        log.info("Update product: " + product);
+        return ResponseEntity.ok(productRepository.save(product));
     }
 
     //    Delete product
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable String id) {
-        Product product = productRepository.findByProductId(id);
-        if (product == null)
-            throw new ResourceNotFoundException("Product not found with id: " + id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
         productRepository.delete(product);
+
+        log.info("Delete product: " + product);
         return ResponseEntity.ok(product);
     }
     @GetMapping("/chartdata")

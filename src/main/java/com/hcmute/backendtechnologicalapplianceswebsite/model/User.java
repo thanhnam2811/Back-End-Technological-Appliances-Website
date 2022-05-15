@@ -157,6 +157,10 @@ public class User implements Serializable {
     }
 
     public String getRole() {
-        return Account.getRoleName(account.getRole());
+        String role = Account.getRoleName(Account.ROLE_USER);
+        if (account != null) {
+            role = Account.getRoleName(account.getRole());
+        }
+        return role;
     }
 }
