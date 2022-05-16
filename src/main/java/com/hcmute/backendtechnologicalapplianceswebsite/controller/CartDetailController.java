@@ -36,11 +36,7 @@ public class CartDetailController {
         List<CartDetail> cartDetails = cartDetailRepository.findAllById_Username(username);
 
         log.info("Get all cart details of user: {}", username);
-        if (cartDetails.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart details not found");
-        } else {
-            return ResponseEntity.ok(cartDetails);
-        }
+        return ResponseEntity.ok(cartDetails);
     }
 
     @PostMapping("/cart-details/{username}/{productId}")
