@@ -40,8 +40,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             publicPaths.add(apiPath + "/brands/**");
             publicPaths.add(apiPath + "/reviews/**");
             publicPaths.add(apiPath + "/categories/**");
-            publicPaths.add(apiPath + "/getImage/**");
-            publicPaths.add(apiPath + "/downloadFile/**");
+            publicPaths.add("/getImage/**");
+            publicPaths.add("/downloadFile/**");
 
             for (String path : publicPaths) {
                 if (path.contains("/**") && servletPath.startsWith(path.replace("/**", ""))) {

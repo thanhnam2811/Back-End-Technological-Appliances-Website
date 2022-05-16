@@ -46,7 +46,7 @@ public class FileUploadController {
         if (ImgName.length() == 0) {
             return ResponseEntity.badRequest().body("File is not image");
         } else {
-            String url = "http://localhost:8080/api/technological_appliances/downloadFile/" + ImgName;
+            String url = "http://localhost:8080/getImage/" + ImgName;
             return ResponseEntity.ok().body(url);
         }
     }
