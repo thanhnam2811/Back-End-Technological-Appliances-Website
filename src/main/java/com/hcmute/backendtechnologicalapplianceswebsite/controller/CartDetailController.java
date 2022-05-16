@@ -35,6 +35,23 @@ public class CartDetailController {
     public ResponseEntity<List<CartDetail>> getCartDetails(@PathVariable String username) {
         List<CartDetail> cartDetails = cartDetailRepository.findAllById_Username(username);
 
+        for (CartDetail cartDetail : cartDetails) {
+            Product product = productRepository.findById(cartDetail.getId().getProductId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + cartDetail.getId().getProductId()));
+            if (product.getQuantity() < cartDetail.getQuantity()) {
+                if (product.getQuantity() == 0) {
+                    log.warn("Quantity of product: {} is 0, remove product from cart", product.getName());
+                    cartDetailRepository.deleteById(cartDetail.getId());
+                } else {
+                    log.warn("Quantity of product: {} is not enough (in cart: {} > in product: {})",
+                            product.getName(), cartDetail.getQuantity(), product.getQuantity());
+                    log.info("Set quantity of product: {} to quantity in product: {}", product.getName(), product.getQuantity());
+                    cartDetail.setQuantity(product.getQuantity());
+                    cartDetailRepository.save(cartDetail);
+                }
+            }
+        }
+
         log.info("Get all cart details of user: {}", username);
         return ResponseEntity.ok(cartDetails);
     }
@@ -69,6 +86,22 @@ public class CartDetailController {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found with id: " + cartDetailId));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + productId));
+
+        if (product.getQuantity() < cartDetail.getQuantity()) {
+            if (product.getQuantity() == 0) {
+                log.warn("Quantity of product: {} is 0, remove product from cart", product.getName());
+                cartDetailRepository.deleteById(cartDetail.getId());
+            } else {
+                log.warn("Quantity of product: {} is not enough (in cart: {} > in product: {})",
+                        product.getName(), cartDetail.getQuantity(), product.getQuantity());
+                log.info("Set quantity of product: {} to quantity in product: {}", product.getName(), product.getQuantity());
+                cartDetail.setQuantity(product.getQuantity());
+                cartDetailRepository.save(cartDetail);
+            }
+        }
 
         log.info("Get cart detail: {}", cartDetailId);
         return ResponseEntity.ok(cartDetail);

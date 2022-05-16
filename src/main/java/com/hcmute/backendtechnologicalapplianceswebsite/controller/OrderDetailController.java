@@ -8,6 +8,7 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepositor
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -52,21 +53,31 @@ public class OrderDetailController {
         return ResponseEntity.ok().body(orderDetails);
     }
 
+    @Transactional
     @PostMapping("/order-details/{username}")
-    public ResponseEntity<OrderDetail> createOrderDetail(@RequestBody OrderDetail orderDetail, @PathVariable String username) {
-        Order order = orderRepository.findById(orderDetail.getId().getOrderId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found with id: " + orderDetail.getId().getOrderId()));
-        if (order.getUser().getUsername().equals(username)) {
+    public ResponseEntity<List<OrderDetail>> createOrderDetail(@RequestBody List<OrderDetail> orderDetailList, @PathVariable String username) {
+        for (OrderDetail orderDetail : orderDetailList) {
+            Order order = orderRepository.findById(orderDetail.getId().getOrderId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found with id: " + orderDetail.getId().getOrderId()));
             Product product = productRepository.findById(orderDetail.getId().getProductId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + orderDetail.getId().getProductId()));
+
+            if (!order.getUser().getUsername().equals(username)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not match with order");
+            }
+
+            if (orderDetail.getQuantity() > product.getQuantity()) {
+                orderRepository.delete(order);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity is greater than product quantity in stock");
+            }
+
+            orderDetail.setId(new OrderDetailId(order.getOrderId(), product.getProductId()));
             orderDetail.setOrder(order);
             orderDetail.setProduct(product);
-
-            log.info("Create order detail: " + orderDetail);
-            return ResponseEntity.ok().body(orderDetailRepository.save(orderDetail));
-        } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can't create order detail for this order");
+            orderDetailRepository.save(orderDetail);
         }
+        log.info("Create order detail");
+        return ResponseEntity.ok().body(orderDetailList);
     }
 
     @GetMapping("/order-details/{orderId}/{productId}")
