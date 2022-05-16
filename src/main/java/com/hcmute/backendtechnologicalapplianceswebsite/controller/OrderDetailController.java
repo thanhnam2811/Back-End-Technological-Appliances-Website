@@ -59,6 +59,11 @@ public class OrderDetailController {
         if (order.getUser().getUsername().equals(username)) {
             Product product = productRepository.findById(orderDetail.getId().getProductId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + orderDetail.getId().getProductId()));
+
+            if (orderDetail.getQuantity() > product.getQuantity()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quantity is greater than product quantity");
+            }
+
             orderDetail.setOrder(order);
             orderDetail.setProduct(product);
 

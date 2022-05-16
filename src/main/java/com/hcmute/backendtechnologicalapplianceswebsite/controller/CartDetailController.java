@@ -70,6 +70,14 @@ public class CartDetailController {
         CartDetail cartDetail = cartDetailRepository.findById(cartDetailId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found with id: " + cartDetailId));
 
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + productId));
+        if (cartDetail.getQuantity() > product.getQuantity()) {
+            log.info("Quantity of cart detail is: {} > quantity of product: {}", cartDetail.getQuantity(), product.getQuantity());
+            log.info("Set quantity of cart detail to: {}", product.getQuantity());
+            cartDetail.setQuantity(product.getQuantity());
+        }
+
         log.info("Get cart detail: {}", cartDetailId);
         return ResponseEntity.ok(cartDetail);
     }
