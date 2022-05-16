@@ -63,14 +63,14 @@ public class UserController {
         return ResponseEntity.ok(_user);
     }
 
-    @Transactional
     //    Delete user
+    @Transactional
     @DeleteMapping("/users/{username}")
     public ResponseEntity<User> deleteUser(@PathVariable String username) {
         User user = userRepository.findById(username).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with username: " + username));
-        userRepository.delete(user);
 
+        userRepository.deleteByUsername(username);
         log.info("Delete user: " + user);
         return ResponseEntity.ok(user);
     }
