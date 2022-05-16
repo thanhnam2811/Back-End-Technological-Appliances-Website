@@ -120,8 +120,8 @@ CREATE TABLE Orders
 (
     OrderId       VARCHAR(20) PRIMARY KEY,
     Username      VARCHAR(40) FOREIGN KEY REFERENCES dbo.Users (Username)
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        ON UPDATE CASCADE
+        ON DELETE CASCADE ,
     Name          NVARCHAR(100) NOT NULL,
     Address       NVARCHAR(200) NOT NULL,
     PhoneNumber   VARCHAR(20)   NOT NULL,

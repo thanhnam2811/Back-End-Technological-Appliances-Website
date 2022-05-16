@@ -48,11 +48,11 @@ public class CartDetailController {
         CartDetailId cartDetailId = new CartDetailId(username, productId);
 
         if (cartDetailRepository.existsById(cartDetailId)) {
-            CartDetail newCartDetail = cartDetailRepository.findById(cartDetail.getId())
+            CartDetail newCartDetail = cartDetailRepository.findById(cartDetailId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CartDetail not found with id: " + cartDetail.getId()));
             newCartDetail.setQuantity(newCartDetail.getQuantity() + cartDetail.getQuantity());
 
-            log.info("CartDetail is existed, update quantity of cart detail: {}", cartDetail.getId());
+            log.info("CartDetail is existed, update quantity of cart detail: {}", cartDetailId);
             return cartDetailRepository.save(newCartDetail);
         } else {
             User user = userRepository.findById(username)
@@ -61,6 +61,7 @@ public class CartDetailController {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + cartDetail.getId().getProductId()));
             cartDetail.setUser(user);
             cartDetail.setProduct(product);
+            cartDetail.setId(cartDetailId);
 
             log.info("Create new cart detail: {}", cartDetail.getId());
             return cartDetailRepository.save(cartDetail);

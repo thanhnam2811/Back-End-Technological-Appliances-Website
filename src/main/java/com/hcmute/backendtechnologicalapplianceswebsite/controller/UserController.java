@@ -5,6 +5,7 @@ import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepositor
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,6 +28,7 @@ public class UserController {
     }
 
     //    Create user
+    @Transactional
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
         log.info("Create user: " + user);
@@ -44,6 +46,7 @@ public class UserController {
     }
 
     //    Update user
+    @Transactional
     @PutMapping("/users/{username}")
     public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user) {
         User _user = userRepository.findById(username).
@@ -60,6 +63,7 @@ public class UserController {
         return ResponseEntity.ok(_user);
     }
 
+    @Transactional
     //    Delete user
     @DeleteMapping("/users/{username}")
     public ResponseEntity<User> deleteUser(@PathVariable String username) {

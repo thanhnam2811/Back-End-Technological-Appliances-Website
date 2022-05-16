@@ -88,7 +88,15 @@ public class ProductController {
     @GetMapping(value = "/products/newest/{quantity}")
     public List<Product> getTopProductsNewest(@PathVariable Integer quantity) {
         log.info("Get top " + quantity + " products newest");
-        return productRepository.findAll(Sort.by("saleDate", "ProductId").descending()).subList(0, quantity);
+        List<Product> products = productRepository
+                .findAll(Sort.by("saleDate", "ProductId").descending());
+
+        if (products.size() < quantity) {
+            log.info("Quantity: " + quantity + " is greater than products size: " + products.size() + ", return all products");
+            return products;
+        } else {
+            return products.subList(0, quantity);
+        }
     }
 
     @GetMapping(value = "/products/topseller")
