@@ -2,10 +2,11 @@ package com.hcmute.backendtechnologicalapplianceswebsite.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 public class MyUtils {
@@ -28,5 +29,9 @@ public class MyUtils {
 
     public static String generateToken() {
         return generateToken(60);
+    }
+
+    public static boolean isImageFile(MultipartFile file) throws IOException {
+        return ImageIO.read(file.getInputStream()) != null;
     }
 }

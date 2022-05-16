@@ -65,16 +65,9 @@ public class ProductController {
 
     //    Create product
     @PostMapping(value = "/products")
-    public Product createProduct(@RequestBody Product product, @RequestParam(value = "files", required = false) MultipartFile[] uploadedFiles) {
+    public Product createProduct(@RequestBody Product product) {
         //  Default value for productId
         product.setProductId(productRepository.generateProductId());
-
-        if (uploadedFiles != null && uploadedFiles.length > 0) {
-            for (MultipartFile file : uploadedFiles) {
-                String fileName = GetFileNameImg(file);
-                product.setImage(fileName);
-            }
-        }
 
         Brand brand = brandRepository.findById(product.getBrand().getBrandId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + product.getBrand().getBrandId()));
@@ -167,21 +160,11 @@ public class ProductController {
 
     //    Update product
     @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product, @RequestParam(value = "files", required = false) MultipartFile[] files) {
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product) {
         // Check if product exist
         Product _product = productRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found with id: " + id));
         product.setProductId(_product.getProductId());
-
-        // Update image if not null
-        if (files != null && files.length > 0) {
-            for (MultipartFile file : files) {
-                String fileName = GetFileNameImg(file);
-                product.setImage(fileName);
-            }
-        } else {
-            log.info("No file in request, use old file");
-        }
 
         // Update brand and category
         Brand brand = brandRepository.findById(product.getBrand().getBrandId())
