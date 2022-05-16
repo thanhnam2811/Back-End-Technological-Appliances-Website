@@ -36,17 +36,15 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         if (method.equals("GET")) {
             List<String> publicPaths = new ArrayList<>();
-            publicPaths.add(apiPath + "/products");
             publicPaths.add(apiPath + "/products/**");
-            publicPaths.add(apiPath + "/brands");
             publicPaths.add(apiPath + "/brands/**");
-            publicPaths.add(apiPath + "/reviews");
             publicPaths.add(apiPath + "/reviews/**");
-            publicPaths.add(apiPath + "/categories");
             publicPaths.add(apiPath + "/categories/**");
+            publicPaths.add(apiPath + "/getImage/**");
+            publicPaths.add(apiPath + "/downloadFile/**");
 
             for (String path : publicPaths) {
-                if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
+                if (path.contains("/**") && servletPath.startsWith(path.replace("/**", ""))) {
                     return true;
                 } else if (servletPath.equals(path)) {
                     return true;
@@ -56,11 +54,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             List<String> publicPaths = new ArrayList<>();
             publicPaths.add(apiPath + "/login");
             publicPaths.add(apiPath + "/register");
-            publicPaths.add(apiPath + "/reset-password");
             publicPaths.add(apiPath + "/forgot-password/**");
 
             for (String path : publicPaths) {
-                if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
+                if (path.contains("/**") && servletPath.startsWith(path.replace("/**", ""))) {
                     return true;
                 } else if (servletPath.equals(path)) {
                     return true;
