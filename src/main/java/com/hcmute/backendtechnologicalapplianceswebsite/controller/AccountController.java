@@ -42,7 +42,7 @@ public class AccountController {
     }
 
     @PostMapping("/forgot-password/{username}")
-    public String forgotPassword(@PathVariable String username, @RequestParam String email) {
+    public Boolean forgotPassword(@PathVariable String username, @RequestParam String email) {
         User user = userRepository.findById(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with username: " + username));
         if (!user.getEmail().equals(email)) {
@@ -65,7 +65,7 @@ public class AccountController {
             emailService.sendEmail(mail);
 
             log.info("Send email to " + user.getEmail());
-            return "Email has been sent";
+            return true;
         }
     }
 
