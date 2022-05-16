@@ -54,6 +54,15 @@ public class ProductController {
         return productRepository.findAllByBrand(brand);
     }
 
+    // Get all product by brand
+    @GetMapping(value = "/products/brand/{brandId}/{quantity}")
+    public List<Product> getAllProductsByBrand(@PathVariable String brandId, @PathVariable int quantity) {
+        log.info("Get all product by brand: " + brandId);
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + brandId));
+        return productRepository.findAllByBrand(brand).subList(0, quantity);
+    }
+
     //    Create product
     @PostMapping(value = "/products")
     public Product createProduct(@RequestBody Product product, @RequestParam(value = "files", required = false) MultipartFile[] uploadedFiles) {

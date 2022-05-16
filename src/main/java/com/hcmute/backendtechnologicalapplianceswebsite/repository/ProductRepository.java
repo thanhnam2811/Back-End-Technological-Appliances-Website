@@ -33,7 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
         return MyUtils.generateID(PREFIX, length, lastProductId);
     }
 
-    Iterable<Product> findAllByBrand(Brand brand);
+    List<Product> findAllByBrand(Brand brand);
 
     @Query(value = "select top(3)  * from Products,(select ProductId,sum(Quantity)as Sum from OrderDetails group by ProductId)as temp where temp.ProductId=Products.ProductId order by sum desc", nativeQuery = true)
     Iterable<Product> gettopseller();
