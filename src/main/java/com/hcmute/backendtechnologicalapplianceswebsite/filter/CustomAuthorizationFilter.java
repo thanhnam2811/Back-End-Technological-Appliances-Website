@@ -102,10 +102,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                         }
                     }
                 } catch (Exception e) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed, error: " + e.getMessage());
                 }
             } else {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token must be provided as 'Authorization: Bearer <token>'");
             }
         }
     }
