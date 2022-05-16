@@ -195,6 +195,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         userPaths.add(apiPath + "/order-details/username/" + username);
         // User
         userPaths.add(apiPath + "/users/" + username);
+        // Coupon
+        userPaths.add(apiPath + "/coupons/**");
 
         for (String path : userPaths) {
             if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
