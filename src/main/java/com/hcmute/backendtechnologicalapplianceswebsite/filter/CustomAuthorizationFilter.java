@@ -132,7 +132,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         userPaths.add(apiPath + "/reviews/" + username + "/**");
 
         for (String path : userPaths) {
-            if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
+            if (path.contains("/**") && servletPath.startsWith(path.replace("/**", ""))) {
                 return true;
             } else if (servletPath.equals(path)) {
                 return true;
@@ -152,7 +152,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         userPaths.add(apiPath + "/users/" + username);
 
         for (String path : userPaths) {
-            if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
+            if (path.contains("/**") && servletPath.startsWith(path.replace("/**", ""))) {
                 return true;
             } else if (servletPath.equals(path)) {
                 return true;
@@ -175,7 +175,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         userPaths.add(apiPath + "/change-password/" + username);
 
         for (String path : userPaths) {
-            if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
+            if (path.contains("/**") && servletPath.startsWith(path.replace("/**", ""))) {
                 return true;
             } else if (servletPath.equals(path)) {
                 return true;
@@ -187,7 +187,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     private boolean isGETRequestValid(String servletPath, String username) {
         List<String> userPaths = new ArrayList<>();
         // CartDetail
-        userPaths.add(apiPath + "/cart-details/" + username);
         userPaths.add(apiPath + "/cart-details/" + username + "/**");
         // Order
         userPaths.add(apiPath + "/orders/username/" + username);
@@ -197,9 +196,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         userPaths.add(apiPath + "/users/" + username);
         // Coupon
         userPaths.add(apiPath + "/coupons/**");
+        // Delivery
+        userPaths.add(apiPath + "/deliveries/**");
+
 
         for (String path : userPaths) {
-            if (path.contains("**") && servletPath.startsWith(path.replace("**", ""))) {
+            if (path.contains("/**") && servletPath.startsWith(path.replace("/**", ""))) {
                 return true;
             } else if (servletPath.equals(path)) {
                 return true;
