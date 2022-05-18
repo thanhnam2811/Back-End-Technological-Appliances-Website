@@ -4,6 +4,8 @@ import com.hcmute.backendtechnologicalapplianceswebsite.model.Account;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Mail;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.PasswordResetToken;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.account.AccountAbstractFactory;
+import com.hcmute.backendtechnologicalapplianceswebsite.model.account.AccountFactory;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.AccountRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.PasswordResetTokenRepository;
 import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
@@ -122,15 +124,19 @@ public class AccountController {
             throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT, "Phone number is existed");
         }
         User newUser = userRepository.save(user);
-        Account account = new Account();
-        account.setUsername(newUser.getUsername());
-        account.setPassword(passwordEncoder.encode(password));
-        account.setUser(newUser);
-        account.setRole(Account.ROLE_USER);
-        accountRepository.save(account);
 
-        log.info("Register new user " + newUser.getUsername());
-        return ResponseEntity.ok(newUser);
+        AccountAbstractFactory factory = AccountFactory.getFactory(Account.ROLE_USER);
+        if (factory != null) {
+            Account account = factory.createAccount(username, passwordEncoder.encode(password));
+            account.setUser(newUser);
+            account.setRole(Account.ROLE_USER);
+            accountRepository.save(account);
+
+            log.info("Register new user " + newUser.getUsername());
+            return ResponseEntity.ok(newUser);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to register new user");
+        }
     }
 
     @PutMapping("/change-role/{username}")

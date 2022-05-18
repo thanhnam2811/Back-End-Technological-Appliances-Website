@@ -11,12 +11,15 @@ public class TotalSales {
     @Id
     @Column(name = "id")
     int Id;
-    @Column(name="total")
+    @Column(name = "total")
     double Total;
-    public TotalSales(){}
-    public TotalSales(int Name,double Total){
-        this.Id=Name;
-        this.Total=Total;
+
+    public TotalSales() {
+    }
+
+    public TotalSales(int Name, double Total) {
+        this.Id = Name;
+        this.Total = Total;
     }
 
     public int getId() {

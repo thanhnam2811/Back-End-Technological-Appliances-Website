@@ -11,15 +11,18 @@ public class TopCustomer {
     @Id
     @Column(name = "id")
     String Id;
-    @Column(name="name")
+    @Column(name = "name")
     String Name;
-    @Column(name="total")
+    @Column(name = "total")
     double Total;
-    public TopCustomer(){}
-    public TopCustomer(String Id,String Name,double Total){
-        this.Id=Id;
-        this.Name=Name;
-        this.Total=Total;
+
+    public TopCustomer() {
+    }
+
+    public TopCustomer(String Id, String Name, double Total) {
+        this.Id = Id;
+        this.Name = Name;
+        this.Total = Total;
     }
 
     public String getId() {

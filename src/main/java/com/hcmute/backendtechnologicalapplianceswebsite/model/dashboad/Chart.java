@@ -13,11 +13,13 @@ public class Chart {
     String name;
     @Column(name = "total")
     double total;
-    public Chart(){}
-    public Chart(String name,double Total)
-    {
-        this.name=name;
-        this.total=Total;
+
+    public Chart() {
+    }
+
+    public Chart(String name, double Total) {
+        this.name = name;
+        this.total = Total;
     }
 
     public String getName() {

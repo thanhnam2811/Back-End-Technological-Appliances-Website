@@ -11,23 +11,24 @@ public class TopProduct {
     @Id
     @Column(name = "id")
     String Id;
-    @Column(name="name")
+    @Column(name = "name")
     String Name;
-    @Column(name="sold")
+    @Column(name = "sold")
     int Sold;
-    @Column(name="total")
+    @Column(name = "total")
     double Total;
-    @Column(name="quantity")
+    @Column(name = "quantity")
     int Quantity;//QuantityInStock
 
-    public TopProduct(){}
+    public TopProduct() {
+    }
 
-    public TopProduct(String Id,String Name,int Sold,double Total,int Quantity){
-        this.Id=Id;
-        this.Name=Name;
-        this.Sold=Sold;
-        this.Total=Total;
-        this.Quantity=Quantity;
+    public TopProduct(String Id, String Name, int Sold, double Total, int Quantity) {
+        this.Id = Id;
+        this.Name = Name;
+        this.Sold = Sold;
+        this.Total = Total;
+        this.Quantity = Quantity;
     }
 
     public String getName() {
