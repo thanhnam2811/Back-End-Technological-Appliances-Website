@@ -81,6 +81,7 @@ public class AccountController {
             String hashPassword = passwordEncoder.encode(password);
             account.setPassword(hashPassword);
             accountRepository.save(account);
+            passwordTokenRepository.delete(passToken);
 
             log.info("Reset password for " + account.getUsername());
             return "Password has been reset";
