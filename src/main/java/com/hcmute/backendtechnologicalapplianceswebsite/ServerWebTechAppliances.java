@@ -1,12 +1,6 @@
 package com.hcmute.backendtechnologicalapplianceswebsite;
 
-import com.hcmute.backendtechnologicalapplianceswebsite.model.Account;
-import com.hcmute.backendtechnologicalapplianceswebsite.model.User;
-import com.hcmute.backendtechnologicalapplianceswebsite.repository.UserRepository;
-import com.hcmute.backendtechnologicalapplianceswebsite.service.AccountService;
-import com.hcmute.backendtechnologicalapplianceswebsite.service.AccountServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.time.LocalDate;
 
 @SpringBootApplication
 @Slf4j
