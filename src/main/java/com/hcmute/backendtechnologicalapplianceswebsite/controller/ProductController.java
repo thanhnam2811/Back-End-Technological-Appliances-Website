@@ -71,7 +71,8 @@ public class ProductController {
         log.info("Get all product by brand: " + brandId);
         Brand brand = brandRepository.findById(brandId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + brandId));
-        return productRepository.findAllByBrand(brand);
+        return productRepository
+                .findAllByBrand(Sort.by(Sort.Direction.DESC, "saleDate", "ProductId"), brand);
     }
 
     // Get all product by brand
@@ -80,7 +81,9 @@ public class ProductController {
         log.info("Get all product by brand: " + brandId);
         Brand brand = brandRepository.findById(brandId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Brand not found with id: " + brandId));
-        return productRepository.findAllByBrand(brand).subList(0, quantity);
+        return productRepository
+                .findAllByBrand(Sort.by(Sort.Direction.DESC, "saleDate", "ProductId"), brand)
+                .subList(0, quantity);
     }
 
     //    Create product

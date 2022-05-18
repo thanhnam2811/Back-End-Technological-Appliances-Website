@@ -3,6 +3,7 @@ package com.hcmute.backendtechnologicalapplianceswebsite.repository;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Brand;
 import com.hcmute.backendtechnologicalapplianceswebsite.model.Product;
 import com.hcmute.backendtechnologicalapplianceswebsite.utils.MyUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -33,7 +34,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
         return MyUtils.generateID(PREFIX, length, lastProductId);
     }
 
-    List<Product> findAllByBrand(Brand brand);
+    List<Product> findAllByBrand(Sort sorter, Brand brand);
 
     @Query(value = "select top(3)  * from Products,(select ProductId,sum(Quantity)as Sum from OrderDetails group by ProductId)as temp where temp.ProductId=Products.ProductId order by sum desc", nativeQuery = true)
     Iterable<Product> gettopseller();
