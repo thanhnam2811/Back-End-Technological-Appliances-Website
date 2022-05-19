@@ -37,7 +37,7 @@ public class FileUploadController {
     }
 
     @PostMapping("/uploadImage")
-    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile[] files) throws IOException {
+    public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("image") MultipartFile[] files) throws IOException {
         String getUrl = "http://localhost:8080/getImage/";
         Map<String, String> image = new HashMap<>();
         int i = 1;
@@ -54,6 +54,6 @@ public class FileUploadController {
                 if (i > 4) break;
             }
         }
-        return ResponseEntity.ok().body(image.toString());
+        return ResponseEntity.ok(image);
     }
 }
