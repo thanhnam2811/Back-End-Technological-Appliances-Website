@@ -94,7 +94,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                         filterChain.doFilter(request, response);
                     } else { // For user
                         if (isValidUserRequest(request, username)) {
-                            filterChain.doFilter(request, response);
+                            try {
+                                filterChain.doFilter(request, response);
+                            } catch (Exception e) {
+                                log.error("Error: {}", e.getMessage());
+                                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+                            }
                         } else {
                             response.sendError(HttpServletResponse.SC_FORBIDDEN, "You don't have permission to access this resource");
                         }

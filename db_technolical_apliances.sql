@@ -81,7 +81,7 @@ CREATE TABLE Products
     Weight      VARCHAR(20),
     VGA         NVARCHAR(100),
     Description nvarchar(max),
-    Price       FLOAT NOT NULL
+    Price       FLOAT       NOT NULL
 )
 GO
 CREATE TABLE Reviews
@@ -121,7 +121,7 @@ CREATE TABLE Orders
     OrderId       VARCHAR(20) PRIMARY KEY,
     Username      VARCHAR(40) FOREIGN KEY REFERENCES dbo.Users (Username)
         ON UPDATE CASCADE
-        ON DELETE CASCADE ,
+        ON DELETE CASCADE,
     Name          NVARCHAR(100) NOT NULL,
     Address       NVARCHAR(200) NOT NULL,
     PhoneNumber   VARCHAR(20)   NOT NULL,
@@ -921,91 +921,233 @@ end
 go
 
 -- SAMPLE DATAS --
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'admin', N'admin', N'admin@email.com', N'0999999999', CAST(N'2001-01-01' AS Date), N'TP.HCM', 1)
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'nam', N'Thái Thành Nam', N'nam@email.com', N'0981771024', CAST(N'2001-11-28' AS Date), N'Bến Tre', 1)
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'phuong', N'Trịnh Xuân Phương', N'phuong@email.com', N'0999999995', CAST(N'2001-01-01' AS Date), N'Bến Tre', 1)
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'tan', N'Cao Hoài Tấn', N'tan@email.com', N'0999999998', CAST(N'2001-01-01' AS Date), N'Bến Tre', 1)
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'toan', N'Nguyễn Phúc Thanh Toàn', N'toan@email.com', N'0999999996', CAST(N'2001-01-01' AS Date), N'Tây Ninh', 1)
-INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender]) VALUES (N'trung', N'Nguyễn Ngọc Trung', N'trung@email.com', N'0999999997', CAST(N'2001-01-01' AS Date), N'Phú Yên', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'admin', N'admin', N'admin@email.com', N'0999999999', CAST(N'2001-01-01' AS Date), N'TP.HCM', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'nam', N'Thái Thành Nam', N'nam@email.com', N'0981771024', CAST(N'2001-11-28' AS Date), N'Bến Tre', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'phuong', N'Trịnh Xuân Phương', N'phuong@email.com', N'0999999995', CAST(N'2001-01-01' AS Date), N'Bến Tre', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'tan', N'Cao Hoài Tấn', N'tan@email.com', N'0999999998', CAST(N'2001-01-01' AS Date), N'Bến Tre', 1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'toan', N'Nguyễn Phúc Thanh Toàn', N'toan@email.com', N'0999999996', CAST(N'2001-01-01' AS Date), N'Tây Ninh',
+        1)
+INSERT [dbo].[Users] ([Username], [Name], [Email], [PhoneNumber], [DateOfBirth], [Address], [Gender])
+VALUES (N'trung', N'Nguyễn Ngọc Trung', N'trung@email.com', N'0999999997', CAST(N'2001-01-01' AS Date), N'Phú Yên', 1)
 GO
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'admin', N'$2a$10$EIJuGNzAYSpm0neUemi.3.eWA44XqltUMszWRqZo64my/IF3tCZI.', 1)
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'nam', N'$2a$10$j5aLIfYSOIbU2Ihkpti2KOh9o4b2J64zvFIRpvUwpy7d/h0bXxO7q', 0)
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'phuong', N'$2a$10$77/xC5K89B3z7SecIu1Wm.PSDnw0qu0z6y6poYQjXTgsLqNeVVCbm', 0)
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'tan', N'$2a$10$FGRitRqmuYpQq8KuGAA4quTRVgBt9LvnEUsF7CyScwa4efCRspXaW', 0)
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'toan', N'$2a$10$dk8yjCKXGgQ.rCKjoGkizetL52Ay..w6IB80Kx7A/Lk161DrXykqy', 0)
-INSERT [dbo].[Account] ([Username], [Password], [Role]) VALUES (N'trung', N'$2a$10$/osmVYwaRKMrNydGUcmRa.Ho1NScl3JuVuT4YTSTHlaYoP.xsUdke', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'admin', N'$2a$10$EIJuGNzAYSpm0neUemi.3.eWA44XqltUMszWRqZo64my/IF3tCZI.', 1)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'nam', N'$2a$10$j5aLIfYSOIbU2Ihkpti2KOh9o4b2J64zvFIRpvUwpy7d/h0bXxO7q', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'phuong', N'$2a$10$77/xC5K89B3z7SecIu1Wm.PSDnw0qu0z6y6poYQjXTgsLqNeVVCbm', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'tan', N'$2a$10$FGRitRqmuYpQq8KuGAA4quTRVgBt9LvnEUsF7CyScwa4efCRspXaW', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'toan', N'$2a$10$dk8yjCKXGgQ.rCKjoGkizetL52Ay..w6IB80Kx7A/Lk161DrXykqy', 0)
+INSERT [dbo].[Account] ([Username], [Password], [Role])
+VALUES (N'trung', N'$2a$10$/osmVYwaRKMrNydGUcmRa.Ho1NScl3JuVuT4YTSTHlaYoP.xsUdke', 0)
 GO
-INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location]) VALUES (N'B01', N'Samsung', N'samsung@email.com', N'link', N'Korea')
+INSERT [dbo].[Deliveries] ([DeliveryId], [Name], [Email], [PhoneNumber], [Location])
+VALUES (N'D01', N'GiaoHanhNhanh', N'GHN@emai.com', N'0998877666', N'TP.HCM')
 GO
 INSERT [dbo].[Categories] ([CategoryId], [Name]) VALUES (N'C01', N'Laptop')
 INSERT [dbo].[Categories] ([CategoryId], [Name]) VALUES (N'C02', N'SmartPhone')
 GO
-INSERT [dbo].[Deliveries] ([DeliveryId], [Name], [Email], [PhoneNumber], [Location]) VALUES (N'D01', N'GiaoHanhNhanh', N'GHN@emai.com', N'0998877666', N'TP.HCM')
+USE [db_technological_appliances]
 GO
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00001', N'Galaxy S21', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a73-1-600x600.jpg', 10, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 2500000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00002', N'Galaxy S21', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a73-1-600x600.jpg', 5, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00003', N'Galaxy S21', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a73-1-600x600.jpg', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 25000000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00004', N'Galaxy S21', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a73-1-600x600.jpg', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 26000000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00005', N'Dell XPS', N'C01', N'B01', N'http://img.websosanh.vn/v2/users/root_product/images/laptop-dell-xps-13-9305-/ync0weuk0ussi.jpg', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 26000000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00006', N'Dell XPS', N'C01', N'B01', N'http://img.websosanh.vn/v2/users/root_product/images/laptop-dell-xps-13-9305-/ync0weuk0ussi.jpg', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 26000000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00007', N'Dell XPS', N'C01', N'B01', N'http://img.websosanh.vn/v2/users/root_product/images/laptop-dell-xps-13-9305-/ync0weuk0ussi.jpg', 1, NULL, 6, N'512', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 26000000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00018', N'iPhone 13 Pro Max 128GB | Chính hãng VN/A', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_13-_pro-5_4.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'6.8', N'Snapdragon 8 gen 1', N'5000mAh', N'188g', NULL, NULL, 34990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00019', N'iPhone 11 64GB I Chính hãng VN/A ', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_11_white_4_.png', 46, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'7.8', N'Snapdragon 8 gen 2', N'5000mAh', N'188g', NULL, NULL, 18000000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00020', N'iPhone 12 Pro Max 128GB I Chính hãng VN/A ', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_12_pro_max_white_1.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'8.8', N'Snapdragon 8 gen 3', N'5000mAh', N'188g', NULL, NULL, 32990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00021', N'Xiaomi Mi 11 Lite 5G', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/x/i/xiaomi-mi-11-lite-5g-2_10.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'9.8', N'Snapdragon 8 gen 4', N'5000mAh', N'188g', NULL, NULL, 10490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00022', N'iPhone 13 128GB | Chính hãng VN/A', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/ip13-pro_2.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'10.8', N'Snapdragon 8 gen 5', N'5000mAh', N'188g', NULL, NULL, 24990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00023', N'iPhone 12 64GB I Chính hãng VN/A ', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-12_2__3.jpg', 46, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'11.8', N'Snapdragon 8 gen 6', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00024', N'Xiaomi POCO X3 Pro', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/x/i/xiaomi-poco-x3-pro-2.jpg', 56, NULL, NULL, N'256 GB', N'16', N'108', N'OneUI', N'12.8', N'Snapdragon 8 gen 7', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00025', N'iPhone 11 128GB I Chính hãng VN/A ', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_11_white.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'13.8', N'Snapdragon 8 gen 8', N'5000mAh', N'188g', NULL, NULL, 19900000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00026', N'OPPO Reno6 Z 5G', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/o/p/oppo_reno6.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'14.8', N'Snapdragon 8 gen 9', N'5000mAh', N'188g', NULL, NULL, 9490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00027', N'Samsung Galaxy A73', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a73-1-600x600.jpg', 46, NULL, NULL, N'256 GB', N'16', N'108', N'OneUI', N'15.8', N'Snapdragon 8 gen 10', N'5000mAh', N'188g', NULL, NULL, 12990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00028', N'OPPO Reno6 5G', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/r/e/reno6-1_1.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'16.8', N'Snapdragon 8 gen 11', N'5000mAh', N'188g', NULL, NULL, 12990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00029', N'OPPO A95', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/c/o/combo_a95_-_en_-_cmyk.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'17.8', N'Snapdragon 8 gen 12', N'5000mAh', N'188g', NULL, NULL, 6990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00030', N'Tecno Pova 2', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/t/e/tecno-pova-2-3.jpg', 46, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'18.8', N'Snapdragon 8 gen 13', N'5000mAh', N'188g', NULL, NULL, 3990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00031', N'Samsung Galaxy A32', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a32-20.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'19.8', N'Snapdragon 8 gen 14', N'5000mAh', N'188g', NULL, NULL, 6490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00032', N'Samsung Galaxy A13 4G 128GB', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/g/a/galaxy_a13.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'20.8', N'Snapdragon 8 gen 15', N'5000mAh', N'188g', NULL, NULL, 4690000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00033', N'Realme Narzo 50A', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/r/e/realme-narzo-50a-600x600.jpg', 56, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'21.8', N'Snapdragon 8 gen 16', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00034', N'iPhone 13 Pro 128GB | Chính hãng VN/A', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_13-_pro-5.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'22.8', N'Snapdragon 8 gen 17', N'5000mAh', N'188g', NULL, NULL, 31990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00035', N'ASUS ROG Phone 5 chính hãng', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/a/s/asus-rog-phone-5_0002_gsmarena_001.jpg', 46, NULL, NULL, N'256 GB', N'16', N'108', N'OneUI', N'23.8', N'Snapdragon 8 gen 18', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00036', N'OPPO Reno7 Z (5G)', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/c/o/combo_product_-_rainbow_spectrum_-_reno7_z.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'24.8', N'Snapdragon 8 gen 19', N'5000mAh', N'188g', NULL, NULL, 10490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00037', N'Tecno Spark 8C', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/4/0/40_1_23.jpg', 46, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'25.8', N'Snapdragon 8 gen 20', N'5000mAh', N'188g', NULL, NULL, 2990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00038', N'Vsmart Aris 8GB 128GB', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/1/1/11_3_1_1.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'26.8', N'Snapdragon 8 gen 21', N'5000mAh', N'188g', NULL, NULL, 6690000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00039', N'iPhone 13 Pro Max 256GB I Chính hãng VN/A', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_13-_pro-5_4_1.jpg', 46, NULL, NULL, N'256 GB', N'16', N'108', N'OneUI', N'27.8', N'Snapdragon 8 gen 22', N'5000mAh', N'188g', NULL, NULL, 37990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00040', N'ASUS ROG Phone 5S 16GB 256GB', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/a/s/asus-rog-phone-5_0002_gsmarena_001_3_1.jpg', 46, NULL, NULL, N'256 GB', N'16', N'108', N'OneUI', N'28.8', N'Snapdragon 8 gen 23', N'5000mAh', N'188g', NULL, NULL, 20990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00041', N'iPhone SE 2022 | Chính hãng VN/A', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone-se-red-select-20220322.jpg', 46, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'29.8', N'Snapdragon 8 gen 24', N'5000mAh', N'188g', NULL, NULL, 12990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00042', N'Samsung Galaxy A52s 5G', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/0/4/04_2_4.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'30.8', N'Snapdragon 8 gen 25', N'5000mAh', N'188g', NULL, NULL, 10990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00043', N'Xiaomi 12 Pro (5G)', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/x/i/xiaomi-12-pro_arenamobiles.jpg', 46, NULL, NULL, N'256 GB', N'16', N'108', N'OneUI', N'31.8', N'Snapdragon 8 gen 26', N'5000mAh', N'188g', NULL, NULL, 27990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00044', N'Realme C35', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/f/r/frame3935-640x640.png', 56, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'32.8', N'Snapdragon 8 gen 27', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00045', N'ASUS ROG Phone 5S 16GB 512GB', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/h/7/h732_1.png', 46, NULL, NULL, N'512 GB', N'16', N'108', N'OneUI', N'33.8', N'Snapdragon 8 gen 28', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00046', N'Realme GT Neo 3', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/r/e/realme-gt-neo3-600x600.jpg', 56, NULL, NULL, N'FALSE', N'16', N'108', N'OneUI', N'34.8', N'Snapdragon 8 gen 29', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00047', N'Samsung Galaxy A12', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a12_2_.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'35.8', N'Snapdragon 8 gen 30', N'5000mAh', N'188g', NULL, NULL, 4290000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00048', N'Nubia Red Magic 6s Pro Cyborg 12GB 128GB', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/n/u/nubia-red-magic-6s-pro-black.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'36.8', N'Snapdragon 8 gen 31', N'5000mAh', N'188g', NULL, NULL, 17990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00049', N'Redmi K40', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/r/e/redmi-k40.jpg', 56, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'37.8', N'Snapdragon 8 gen 32', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00050', N'Nokia G21', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/t/h/thumb_602966_default_big.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'38.8', N'Snapdragon 8 gen 33', N'5000mAh', N'188g', NULL, NULL, 4290000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00051', N'Nubia Red Magic 7', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/z/t/zte-nubia-red-magic-7-600x600.jpg', 56, NULL, NULL, N'FALSE', N'16', N'108', N'OneUI', N'39.8', N'Snapdragon 8 gen 34', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00052', N'iPhone XR 64GB I Chính hãng VN/A ', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_xr_red.png', 56, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'40.8', N'Snapdragon 8 gen 35', N'5000mAh', N'188g', NULL, NULL, 14990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00053', N'Realme Q3 Pro ', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/r/e/realme-q3-pro-1.jpg', 56, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'41.8', N'Snapdragon 8 gen 36', N'5000mAh', N'188g', NULL, NULL, 22990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00054', N'Samsung Galaxy A72', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a72-30.jpg', 56, NULL, NULL, N'256 GB', N'16', N'108', N'OneUI', N'42.8', N'Snapdragon 8 gen 37', N'5000mAh', N'188g', NULL, NULL, 11490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00055', N'Realme 9 Pro', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/r/e/real_me_pro_002.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'43.8', N'Snapdragon 8 gen 38', N'5000mAh', N'188g', NULL, NULL, 7990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00056', N'Xiaomi Redmi 10 (4GB - 128GB)', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/0/0/001_2.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'44.8', N'Snapdragon 8 gen 39', N'5000mAh', N'188g', NULL, NULL, 4290000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00057', N'Tecno Pova 2 6G 128GB', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/t/e/tecno-pova-2-2_2.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'45.8', N'Snapdragon 8 gen 40', N'5000mAh', N'188g', NULL, NULL, 4490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00058', N'Samsung Galaxy S21 Ultra 5G', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-s21-ultra-1_1.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'46.8', N'Snapdragon 8 gen 41', N'5000mAh', N'188g', NULL, NULL, 30990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00059', N'Nokia G50 (5G)', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/n/o/nokia-g50-4_1.jpeg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'47.8', N'Snapdragon 8 gen 42', N'5000mAh', N'188g', NULL, NULL, 6490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00060', N'Vivo Y15a', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/d/i/dien-thoai-vivo-y15a-2021.png', 46, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'48.8', N'Snapdragon 8 gen 43', N'5000mAh', N'188g', NULL, NULL, 3790000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00061', N'iPhone 12 Pro 128GB I Chính hãng VN/A ', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_12_pro_black.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'49.8', N'Snapdragon 8 gen 44', N'5000mAh', N'188g', NULL, NULL, 30990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00062', N'Samsung Galaxy S20 FE 256GB (Fan Edition)', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-20-fe_4_.jpg', 46, NULL, NULL, N'256 GB', N'16', N'108', N'OneUI', N'50.8', N'Snapdragon 8 gen 45', N'5000mAh', N'188g', NULL, NULL, 15490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00063', N'Samsung Galaxy A23', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/a/samsung-galaxy-a23-cam-thumb-600x600_1.jpg', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'51.8', N'Snapdragon 8 gen 46', N'5000mAh', N'188g', NULL, NULL, 5690000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00064', N'iPhone 12 mini 64GB I Chính hãng VN/A ', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_12_mini_blue.png', 56, NULL, NULL, N'64 GB', N'16', N'108', N'OneUI', N'52.8', N'Snapdragon 8 gen 47', N'5000mAh', N'188g', NULL, NULL, 18990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00065', N'Xiaomi Redmi Note 10', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/x/i/xiaomi-redmi-note-10_1.jpg', 56, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'53.8', N'Snapdragon 8 gen 48', N'5000mAh', N'188g', NULL, NULL, 5490000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00066', N'Samsung Galaxy A03 (3GB - 32GB)', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/s/c/screenshot_2_39.png', 46, NULL, NULL, N'32 GB', N'16', N'108', N'OneUI', N'54.8', N'Snapdragon 8 gen 49', N'5000mAh', N'188g', NULL, NULL, 2990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00067', N'OPPO Reno7 4G (8GB - 128GB)', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/c/o/combo_product_-_black_-_reno7_4g.png', 46, NULL, NULL, N'128 GB', N'16', N'108', N'OneUI', N'55.8', N'Snapdragon 8 gen 50', N'5000mAh', N'188g', NULL, NULL, 8990000)
-INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM], [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description], [Price]) VALUES (N'P00068', N'Xiaomi Redmi 9A', N'C02', N'B01', N'https://cdn.cellphones.com.vn/media/catalog/product/cache/7/small_image/9df78eab33525d08d6e5fb8d27136e95/r/e/redmi_9a_0005_background.jpg', 46, NULL, NULL, N'32 GB', N'16', N'108', N'OneUI', N'56.8', N'Snapdragon 8 gen 51', N'5000mAh', N'188g', NULL, NULL, 2490000)
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
+VALUES (N'B01', N'Samsung', N'samsung@email.com', N'link', N'Korea')
 GO
-INSERT [dbo].[Reviews] ([ReviewId], [Username], [ProductId], [Content], [Rate], [Time]) VALUES (N'R00001', N'nam', N'P00001', N'Sản phẩm tẹt zời', 5, CAST(N'2022-03-26T07:28:32.000' AS DateTime))
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
+VALUES (N'B02', N'Xiaomi', N'xiaomi@mail.com', N'link', N'China')
 GO
-INSERT [dbo].[Orders] ([OrderId], [Username], [Name], [Address], [PhoneNumber], [PurchaseDate], [TotalPrices], [DeliveryId], [Status], [CouponId], [DiscountPrice]) VALUES (N'O00001', N'nam', N'Nam', N'Bến Tre', N'0981771024', CAST(N'2022-03-24T00:00:00.000' AS DateTime), 5000000, N'D01', N'waiting', NULL, NULL)
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
+VALUES (N'B03', N'MSI', N'msi@mail.com', N'link', N'China')
 GO
-INSERT [dbo].[OrderDetails] ([OrderId], [ProductId], [Quantity], [Price], [TotalPrice]) VALUES (N'O00001', N'P00001', 2, 2500000, 5000000)
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
+VALUES (N'B04', N'Oppo', N'oppo@mail.com', N'link', N'China')
 GO
-INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity]) VALUES (N'nam', N'P00002', 5)
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
+VALUES (N'B05', N'Apple', N'apple@mail.com', N'link', N'America')
+GO
+INSERT [dbo].[Brands] ([BrandId], [Name], [Email], [Logo], [Location])
+VALUES (N'B06', N'Lenovo', N'lenovo@mail.com', N'link', N'America')
+GO
+USE [db_technological_appliances]
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00001', N'OPPO A74 5G', N'C02', N'B04',
+        N'{"image3":"http://localhost:8080/getImage/1.3.jpg","image4":"http://localhost:8080/getImage/1.4.jpg","image1":"http://localhost:8080/getImage/1.1.jpg","image2":"http://localhost:8080/getImage/1.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 6, N'128 GB', N'18', N'180', N'Android', N'5.6',
+        N'Snapdragon', N'5000mAh', N'188g', N'', N'', 10000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00002', N'OPPO A15s', N'C02', N'B04',
+        N'{"image3":"http://localhost:8080/getImage/2.3.jpg","image4":"http://localhost:8080/getImage/2.4.jpg","image1":"http://localhost:8080/getImage/2.1.jpg","image2":"http://localhost:8080/getImage/2.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 8, N'128 GB', N'18', N'180', N'Android', N'5.6',
+        N'Snapdragon', N'5000mAh', N'188g', N'', N'', 12000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00003', N'OPPO A16', N'C02', N'B04',
+        N'{"image3":"http://localhost:8080/getImage/3.3.jpg","image4":"http://localhost:8080/getImage/3.4.jpg","image1":"http://localhost:8080/getImage/3.1.jpg","image2":"http://localhost:8080/getImage/3.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 4, N'128 GB', N'18', N'180', N'Android', N'5.6',
+        N'Snapdragon', N'5000mAh', N'188g', N'', N'', 6990000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00004', N'Iphone 13 Mini', N'C02', N'B05',
+        N'{"image3":"http://localhost:8080/getImage/4.3.jpg","image4":"http://localhost:8080/getImage/4.4.jpg","image1":"http://localhost:8080/getImage/4.1.jpg","image2":"http://localhost:8080/getImage/4.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 8, N'256 GB', N'18', N'180', N'IOS', N'5.6', N'Snapdragon',
+        N'5000mAh', N'188g', N'', N'', 25990000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00005', N'Iphone 12 Promax', N'C02', N'B05',
+        N'{"image3":"http://localhost:8080/getImage/5.3.jpg","image4":"http://localhost:8080/getImage/5.4.jpg","image1":"http://localhost:8080/getImage/5.1.jpg","image2":"http://localhost:8080/getImage/5.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 8, N'256 GB', N'18', N'180', N'IOS', N'5.6', N'Snapdragon',
+        N'5000mAh', N'188g', N'', N'', 20990000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00006', N'Iphone 11 Promax', N'C01', N'B05',
+        N'{"image3":"http://localhost:8080/getImage/6.3.jpg","image4":"http://localhost:8080/getImage/6.4.jpg","image1":"http://localhost:8080/getImage/6.1.jpg","image2":"http://localhost:8080/getImage/6.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 6, N'128 GB', N'18', N'180', N'IOS', N'5.6', N'Snapdragon',
+        N'5000mAh', N'188g', N'', N'', 11990000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00007', N'Samsung Galaxy A52s', N'C02', N'B01',
+        N'{"image3":"http://localhost:8080/getImage/7.3.jpg","image4":"http://localhost:8080/getImage/7.4.jpg","image1":"http://localhost:8080/getImage/7.1.jpg","image2":"http://localhost:8080/getImage/7.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 6, N'128 GB', N'18', N'180', N'Android', N'5.6',
+        N'Snapdragon', N'5000mAh', N'188g', N'', N'', 10000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00008', N'Samsung Galaxy S22', N'C02', N'B01',
+        N'{"image3":"http://localhost:8080/getImage/8.3.jpg","image4":"http://localhost:8080/getImage/8.4.jpg","image1":"http://localhost:8080/getImage/8.1.jpg","image2":"http://localhost:8080/getImage/8.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 8, N'256 GB', N'18', N'180', N'Android', N'5.6',
+        N'Snapdragon', N'5000mAh', N'188g', N'', N'', 25990000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00009', N'Xiaomi Redmi Note 11S series', N'C02', N'B01',
+        N'{"image3":"http://localhost:8080/getImage/9.3.jpg","image4":"http://localhost:8080/getImage/9.4.jpg","image1":"http://localhost:8080/getImage/9.1.jpg","image2":"http://localhost:8080/getImage/9.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 9, N'128 GB', N'18', N'180', N'Android', N'5.6',
+        N'Snapdragon', N'5000mAh', N'188g', N'', N'', 1000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00010', N'Xiaomi Redmi Note 11 Series', N'C02', N'B02',
+        N'{"image3":"http://localhost:8080/getImage/10.3.jpg","image4":"http://localhost:8080/getImage/10.4.jpg","image1":"http://localhost:8080/getImage/10.1.jpg","image2":"http://localhost:8080/getImage/10.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 4, N'128 GB', N'18', N'180', N'Android', N'5.6',
+        N'Snapdragon', N'5000mAh', N'188g', N'', N'', 500000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00011', N'Acer Nitro 5 Gaming AN515 57 5831', N'C01', N'B06',
+        N'{"image3":"http://localhost:8080/getImage/11.3.jpg","image4":"http://localhost:8080/getImage/11.4.jpg","image1":"http://localhost:8080/getImage/11.1.jpg","image2":"http://localhost:8080/getImage/11.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 16, N'512 GB', N'', N'', N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.5 kg', N'Nvidia', N'', 25000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00012', N'Asus Gaming ROG Flow Z13 GZ301Z', N'C01', N'B06',
+        N'{"image3":"http://localhost:8080/getImage/12.3.jpg","image4":"http://localhost:8080/getImage/12.4.jpg","image1":"http://localhost:8080/getImage/12.1.jpg","image2":"http://localhost:8080/getImage/12.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 16, N' 1 TB', N'', N'', N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.5 kg', N'Nvidia', N'', 25990000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00013', N'MSI Gaming GS66 Stealth 11UG i7 11800H (219VN)', N'C01', N'B06',
+        N'{"image3":"http://localhost:8080/getImage/13.3.jpg","image4":"http://localhost:8080/getImage/13.4.jpg","image1":"http://localhost:8080/getImage/13.1.jpg","image2":"http://localhost:8080/getImage/13.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 16, N' 1 TB', N'', N'', N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.5 kg', N'Nvidia', N'', 30000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00014', N'Lenovo Gaming Legion 5 15ITH6', N'C01', N'B06',
+        N'{"image3":"http://localhost:8080/getImage/14.3.jpg","image4":"http://localhost:8080/getImage/14.4.jpg","image1":"http://localhost:8080/getImage/14.1.jpg","image2":"http://localhost:8080/getImage/14.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 8, N'512 GB', N'', N'', N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.5 kg', N'Nvidia', N'', 25990000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00015', N'MSI Gaming GS66 Stealth 11UG', N'C01', N'B05',
+        N'{"image3":"http://localhost:8080/getImage/15.3.jpg","image4":"http://localhost:8080/getImage/15.4.jpg","image1":"http://localhost:8080/getImage/15.1.jpg","image2":"http://localhost:8080/getImage/15.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 16, N' 1 TB', N'', N'', N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.5 kg', N'Nvidia', N'', 30000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00016', N'Laptop Intel NUC M15 Kit i5 1135G7', N'C01', N'B06',
+        N'{"image3":"http://localhost:8080/getImage/16.3.jpg","image4":"http://localhost:8080/getImage/16.4.jpg","image1":"http://localhost:8080/getImage/16.1.jpg","image2":"http://localhost:8080/getImage/16.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 8, N'256 GB', N'', N'', N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.5 kg', N'Nvidia', N'', 24500000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00017', N'Lenovo IdeaPad Gaming 3 15IHU6', N'C01', N'B06',
+        N'{"image3":"http://localhost:8080/getImage/17.3.jpg","image4":"http://localhost:8080/getImage/17.4.jpg","image1":"http://localhost:8080/getImage/17.1.jpg","image2":"http://localhost:8080/getImage/17.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 8, N'256 GB', N'', N'', N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.5 kg', N'Nvidia', N'', 22000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00018', N'Asus TUF Gaming FX506LH ', N'C02', N'B06',
+        N'{"image3":"http://localhost:8080/getImage/18.3.jpg","image4":"http://localhost:8080/getImage/18.4.jpg","image1":"http://localhost:8080/getImage/18.1.jpg","image2":"http://localhost:8080/getImage/18.2.jpg"}',
+        100, CAST(N'2022-05-19T07:00:00.000' AS DateTime), 8, N'256 GB', N'', N'', N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.5 kg', N'Nvidia', N'', 18000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00019', N'GIGABYTE Gaming G5', N'C02', N'B06',
+        N'{"image3":"http://localhost:8080/getImage/19.3.jpg","image4":"http://localhost:8080/getImage/19.4.jpg","image1":"http://localhost:8080/getImage/19.1.jpg","image2":"http://localhost:8080/getImage/19.2.jpg"}',
+        100, CAST(N'2022-05-19T00:00:00.000' AS DateTime), 8, N'512 GB', NULL, NULL, N'Windown', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'2.7 kg', N'Nvidia', NULL, 25000000)
+GO
+INSERT [dbo].[Products] ([ProductId], [Name], [CategoryId], [BrandId], [Image], [Quantity], [SaleDate], [RAM], [ROM],
+                         [FrontCam], [BackCam], [OS], [Screen], [CPU], [Battery], [Weight], [VGA], [Description],
+                         [Price])
+VALUES (N'P00020', N'MacBook Pro 16 M1 Pro 2021/16 core-GPU', N'C02', N'B05',
+        N'{"image3":"http://localhost:8080/getImage/20.3.jpg","image4":"http://localhost:8080/getImage/20.4.jpg","image1":"http://localhost:8080/getImage/20.1.jpg","image2":"http://localhost:8080/getImage/20.2.jpg"}',
+        100, CAST(N'2022-05-19T00:00:00.000' AS DateTime), 16, N'512 GB', NULL, NULL, N'MacOS', N'55.6',
+        N'Intel Core I7', N'20000mAh', N'1.3 kg', N'Nvidia', NULL, 62990000)
+GO
+
+INSERT [dbo].[Reviews] ([ReviewId], [Username], [ProductId], [Content], [Rate], [Time])
+VALUES (N'R00001', N'nam', N'P00001', N'Sản phẩm tẹt zời', 5, CAST(N'2022-03-26T07:28:32.000' AS DateTime))
+GO
+INSERT [dbo].[Orders] ([OrderId], [Username], [Name], [Address], [PhoneNumber], [PurchaseDate], [TotalPrices],
+                       [DeliveryId], [Status], [CouponId], [DiscountPrice])
+VALUES (N'O00001', N'nam', N'Nam', N'Bến Tre', N'0981771024', CAST(N'2022-03-24T00:00:00.000' AS DateTime), 5000000,
+        N'D01', N'waiting', NULL, NULL)
+GO
+INSERT [dbo].[OrderDetails] ([OrderId], [ProductId], [Quantity], [Price], [TotalPrice])
+VALUES (N'O00001', N'P00001', 2, 2500000, 5000000)
+GO
+INSERT [dbo].[CartDetails] ([Username], [ProductId], [Quantity])
+VALUES (N'nam', N'P00002', 5)
 GO
