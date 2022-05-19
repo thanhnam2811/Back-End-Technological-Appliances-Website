@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,18 +38,22 @@ public class FileUploadController {
 
     @PostMapping("/uploadImage")
     public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile[] files) throws IOException {
-        StringBuilder ImgName = new StringBuilder();
+        String getUrl = "http://localhost:8080/getImage/";
+        Map<String, String> image = new HashMap<>();
+        int i = 1;
         for (var file : files) {
             if (file != null && !file.isEmpty() && MyUtils.isImageFile(file)) {
+                StringBuilder ImgName = new StringBuilder();
+                ImgName.append(getUrl);
+
                 String tempName = GetFileNameImg(file);
                 ImgName.append(tempName);
+
+                image.put("image" + i++, ImgName.toString());
+                // Allow four images
+                if (i == 4) break;
             }
         }
-        if (ImgName.length() == 0) {
-            return ResponseEntity.badRequest().body("File is not image");
-        } else {
-            String url = "http://localhost:8080/getImage/" + ImgName;
-            return ResponseEntity.ok().body(url);
-        }
+        return ResponseEntity.ok().body(image.toString());
     }
 }
