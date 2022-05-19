@@ -51,7 +51,7 @@ public class FileUploadController {
 
                 image.put("image" + i++, ImgName.toString());
                 // Allow four images
-                if (i == 4) break;
+                if (i > 4) break;
             }
         }
         return ResponseEntity.ok().body(image.toString());
