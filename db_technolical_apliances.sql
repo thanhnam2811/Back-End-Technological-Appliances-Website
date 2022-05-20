@@ -68,7 +68,7 @@ CREATE TABLE Products
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     Image       NVARCHAR(MAX),
-    Quantity    INTEGER CHECK (Quantity > 0),
+    Quantity    INTEGER CHECK (Quantity >= 0) DEFAULT 0,
     SaleDate    DATETIME DEFAULT GETDATE(),
     RAM         INTEGER,
     ROM         VARCHAR(20),
