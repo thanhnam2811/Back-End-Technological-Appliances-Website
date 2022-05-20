@@ -68,7 +68,7 @@ CREATE TABLE Products
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     Image       NVARCHAR(MAX),
-    Quantity    INTEGER,
+    Quantity    INTEGER CHECK (Quantity > 0),
     SaleDate    DATETIME DEFAULT GETDATE(),
     RAM         INTEGER,
     ROM         VARCHAR(20),
@@ -145,7 +145,7 @@ CREATE TABLE OrderDetails
     ProductId  VARCHAR(20) FOREIGN KEY REFERENCES dbo.Products (ProductId)
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    Quantity   INTEGER NOT NULL,
+    Quantity   INTEGER NOT NULL CHECK (Quantity > 0),
     Price      FLOAT,
     TotalPrice FLOAT,
     PRIMARY KEY (OrderId, ProductId)
@@ -159,7 +159,7 @@ CREATE TABLE CartDetails
     ProductId VARCHAR(20) FOREIGN KEY REFERENCES dbo.Products (ProductId)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    Quantity  INTEGER NOT NULL,
+    Quantity  INTEGER NOT NULL CHECK (Quantity > 0),
     PRIMARY KEY (Username, ProductId)
 )
 GO
